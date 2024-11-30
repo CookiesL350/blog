@@ -1,0 +1,391 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>QQ农场搭建方案 | CookiesL</title><noscript>开启JavaScript才能访问本站哦~</noscript><link rel="icon" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="http://cookeisl.top/2024/11/30/QQ%E5%86%9C%E5%9C%BA%E6%90%AD%E5%BB%BA%E6%96%B9%E6%A1%88/"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><!-- katex--><!-- Open Graph--><meta name="description" content="搭建高可用负载均衡架构—QQ农场项目1、事前准备负载均衡调度器+keepalived keepalived-01：192.168.10.11 keepalived-02：192.168.10.12 nginx+php web-01：192.168.10.13 web-02：192.168.10.14"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="CookiesL"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg"><link rel="apple-touch-icon" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" sizes="180x180"><script>console.log(' %c Solitude %c ' + '2.1.10' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: '2024-11-30 18-00-00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"复制成功","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请遵循GPL协议。","totalk":"无需删除空行，直接输入评论即可"},
+    aside: {
+        sayhello: {
+            morning: "✨ 在上班的路上吗？",
+            noon: "🍲 事已至此，先干饭吧",
+            afternoon: "🌞 准时下班！！",
+            night: "累了就听会歌吧 🎵",
+            goodnight: "emo 😴",
+        },
+        sayhello2: [],
+        sayhello3: {
+            prefix: '好久不见，',
+            back: '欢迎再次回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'null',
+    post_ai: false,
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: false,
+    comment: false,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">2024/11</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div><div class="console-btn-item" id="consoleMusic" onclick="sco.musicToggle()"><span class="music-switch" title="音乐开关"><i class="solitude fa-solid fa-compact-disc"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">测试</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil"><span class="back-menu-item-text">bilbil</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">我潮哥的B站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/1702485130?spm_id_from=333.999.0.0" title="我潮哥的B站"><img class="nolazyload back-menu-item-icon" src="https://i1.hdslb.com/bfs/face/f489683fec97efbc63fe5b92ae5b27cc968b5c31.jpg@240w_240h_1c_1s_!web-avatar-space-header.avif" alt="我潮哥的B站"><span class="back-menu-item-text">我潮哥的B站</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文库</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>全部文章</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/tlink/"><i class="solitude  fas fa-toolbox"></i><span>在线工具</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">测试</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil"><span class="back-menu-item-text">bilbil</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">我潮哥的B站</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/1702485130?spm_id_from=333.999.0.0" title="我潮哥的B站"><img class="nolazyload back-menu-item-icon" src="https://i1.hdslb.com/bfs/face/f489683fec97efbc63fe5b92ae5b27cc968b5c31.jpg@240w_240h_1c_1s_!web-avatar-space-header.avif" alt="我潮哥的B站"><span class="back-menu-item-text">我潮哥的B站</span></a></div></div></div></div><a id="site-name" href="/" title="返回博客主页"><span class="title">没准是主页(◑ .◐)</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">QQ农场搭建方案</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文库</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>全部文章</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/tlink/"><i class="solitude  fas fa-toolbox"></i><span>在线工具</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div class="nav-button" id="nav-totop" onclick="sco.toTop()"><a class="totopbtn"><i class="solitude fa-solid fa-arrow-up"></i><span id="percent">0</span></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav><div class="coverdiv" id="coverdiv"><img class="nolazyload" id="post-cover" src="/" alt="QQ农场搭建方案"></div><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="该文章为原创文章，注意版权协议">原创</a><div class="tag_share"><div class="post-meta__tag-list"></div></div></div></div><h1 class="post-title">QQ农场搭建方案</h1><div id="post-meta"><div class="meta-secondline"><span class="post-meta-date" title="发布于 2024-11-30 20:38:00"><i class="post-meta-icon solitude fas fa-calendar-days"></i><time datetime="2024-11-30T12:38:00.000Z">2024-11-30T12:38:00.000Z</time></span><span class="post-meta-date" title="最后更新于 2024-11-30 20:38:45"><i class="post-meta-icon solitude fa-solid fa-arrows-rotate"></i><time datetime="2024-11-30T12:38:45.966Z">2024-11-30T12:38:45.966Z</time></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content article-container"><h1 id="搭建高可用负载均衡架构—QQ农场项目"><a href="#搭建高可用负载均衡架构—QQ农场项目" class="headerlink" title="搭建高可用负载均衡架构—QQ农场项目"></a>搭建高可用负载均衡架构—QQ农场项目</h1><h2 id="1、事前准备"><a href="#1、事前准备" class="headerlink" title="1、事前准备"></a>1、事前准备</h2><p>负载均衡调度器+keepalived</p>
+<p>keepalived-01：192.168.10.11</p>
+<p>keepalived-02：192.168.10.12</p>
+<p>nginx+php</p>
+<p>web-01：192.168.10.13</p>
+<p>web-02：192.168.10.14</p>
+<p>MySQL数据库</p>
+<p>mysql-01：192.168.10.15</p>
+<p>NFS网络共享存储</p>
+<p>nfs-01：192.168.10.16</p>
+<p>关闭防火墙与SELinux、关闭NetworkManager、关闭防火墙firewalld。 </p>
+<h2 id="2、部署nginx（keepalived-01、keepalived-02、web-01、web-02）"><a href="#2、部署nginx（keepalived-01、keepalived-02、web-01、web-02）" class="headerlink" title="2、部署nginx（keepalived-01、keepalived-02、web-01、web-02）"></a>2、部署nginx（keepalived-01、keepalived-02、web-01、web-02）</h2><p>1、 避免：Nginx 与 httpd 发生端口冲突 </p>
+<p>卸载：可能已经安装的 httpd，从而避免发生&lt;端口冲突&gt;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(rpm -qa | grep -P <span class="string">&quot;^httpd-([0-9].)+&quot;</span>) &amp;&amp; rpm -e --nodeps httpd || <span class="built_in">echo</span> <span class="string">&quot;未安装&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p>2、 下载：Nginx 源码安装包，并解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~ </span><br><span class="line"><span class="built_in">which</span> wget || yum install -y wget </span><br><span class="line">wget http://nginx.org/download/nginx-1.19.7.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>3、安装其他依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc pcre-devel zlib-devel </span><br></pre></td></tr></table></figure>
+
+<p>4、创建运行账户nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -M -s /sbin/nologin nginx</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-安装nginx"><a href="#2-3-安装nginx" class="headerlink" title="2.3 安装nginx"></a>2.3 安装nginx</h4><ol>
+<li><p>解压nginx-xx.tar.gz包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -axf nginx-1.19.7.tar.gz </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入解压目录，执行.&#x2F;configure 设置安装路径和运行账户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/nginx-1.19.7 </span><br><span class="line">./configure --prefix=/usr/local/nginx --user=nginx --group=nginx </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>make&amp;&amp;make install</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置网页</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/usr/local/nginx/conf/nginx.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">worker_processes 1;</span></span><br><span class="line"><span class="string">events &#123;</span></span><br><span class="line"><span class="string">    worker_connections  1024;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">http &#123;</span></span><br><span class="line"><span class="string">     include            mime.types;</span></span><br><span class="line"><span class="string">     default_type       application/octet-stream;</span></span><br><span class="line"><span class="string">     sendfile           on;</span></span><br><span class="line"><span class="string">     keepalive_timeout  65;</span></span><br><span class="line"><span class="string">     charset            utf-8;</span></span><br><span class="line"><span class="string">     server &#123;</span></span><br><span class="line"><span class="string">        listen          80;</span></span><br><span class="line"><span class="string">        server_name     localhost;</span></span><br><span class="line"><span class="string">		include            conf.d/*.conf;</span></span><br><span class="line"><span class="string">        location / &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">            index       index.html index.htm;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        error_page 500 502 503 504  /50x.html;</span></span><br><span class="line"><span class="string">            location =  /50x.html &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">     &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建辅助配置文件目录</span></span><br><span class="line">[ -d /usr/local/nginx/conf/conf.d ] || <span class="built_in">mkdir</span> -p /usr/local/nginx/conf/conf.d</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="2-3-设置环境变量，同时设置开机自启"><a href="#2-3-设置环境变量，同时设置开机自启" class="headerlink" title="2.3 设置环境变量，同时设置开机自启"></a>2.3 设置环境变量，同时设置开机自启</h4><p>1、设置变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/profile.d/nginx.sh&lt;&lt;<span class="string">EOF </span></span><br><span class="line"><span class="string">export PATH=&quot;/usr/local/nginx/sbin:\$PATH&quot; </span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>2、刷新环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile </span><br></pre></td></tr></table></figure>
+
+<p>3、启停：Nginx 服务进程 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/usr/local/nginx/sbin/nginx&quot;</span> &gt;&gt; /etc/rc.d/rc.local 	<span class="comment">## 设置：开机自启动 </span></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/rc.d/rc.local </span><br><span class="line">nginx 或 nginx -c /usr/local/nginx/conf/nginx.conf           <span class="comment">## 启动：Nginx 服务 </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-访问"><a href="#2-4-访问" class="headerlink" title="2.4 访问"></a>2.4 访问</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl 192.168.10.11</span><br><span class="line">curl 192.168.10.12</span><br><span class="line">curl 192.168.10.13</span><br><span class="line">curl 192.168.10.14</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3、反向代理-负载均衡-keepalived-01、keepalived-02"><a href="#3、反向代理-负载均衡-keepalived-01、keepalived-02" class="headerlink" title="3、反向代理+负载均衡(keepalived-01、keepalived-02)"></a>3、反向代理+负载均衡(keepalived-01、keepalived-02)</h2><h4 id="Nginx-upstream-上游模块（负载均衡）"><a href="#Nginx-upstream-上游模块（负载均衡）" class="headerlink" title="Nginx upstream 上游模块（负载均衡）"></a>Nginx upstream 上游模块（负载均衡）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">    upstream farm &#123;					<span class="comment">##test是服务器池的命名,不要有下划线</span></span><br><span class="line">		server 192.168.10.13:80;	<span class="comment">##上游服务器ip:端口</span></span><br><span class="line">		server 192.168.10.14:80;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Nginx-proxy反向代理模块"><a href="#Nginx-proxy反向代理模块" class="headerlink" title="Nginx proxy反向代理模块"></a>Nginx proxy反向代理模块</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">...</span><br><span class="line">location / &#123;		</span><br><span class="line">    proxy_pass http://farm;	</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4、安装部署Keepalived软件（keepalived-01、keepalived-02）"><a href="#4、安装部署Keepalived软件（keepalived-01、keepalived-02）" class="headerlink" title="4、安装部署Keepalived软件（keepalived-01、keepalived-02）"></a>4、安装部署Keepalived软件（keepalived-01、keepalived-02）</h2><p>1、安装keepalived软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install keepalived -y</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置Keepalived配置文件"><a href="#设置Keepalived配置文件" class="headerlink" title="设置Keepalived配置文件"></a>设置Keepalived配置文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/keepalived/keepalived.conf </span><br></pre></td></tr></table></figure>
+
+<h4 id="keepalived-01操作"><a href="#keepalived-01操作" class="headerlink" title="keepalived-01操作"></a>keepalived-01操作</h4><p>第一步：按冒号：进入末行模式输入set nu 使文件带行号显示，然后使用35gg切换光标到35行，然后按dG，删除35行以 后的所有内容 </p>
+<p>第二步：了解一下配置文件中每一行的含义19~34行 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment"># vrrp_strict		#将这个第十四行注释掉</span></span><br><span class="line">...</span><br><span class="line">vrrp_instance farm &#123;</span><br><span class="line">	state MASTER</span><br><span class="line">	interface ens33</span><br><span class="line">	virtual_router_id 51</span><br><span class="line">	priority 100</span><br><span class="line">	advert_int 1</span><br><span class="line">	authentication &#123;</span><br><span class="line">		auth_type PASS</span><br><span class="line">		auth_pass 1111</span><br><span class="line">	&#125;</span><br><span class="line">	virtual_ipaddress &#123;</span><br><span class="line">		192.168.10.100</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设置完成后，保存并退出</p>
+<p>第三步：启动Keepalived软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start keepalived</span><br><span class="line">systemctl status keepalived</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="keepalived-02操作"><a href="#keepalived-02操作" class="headerlink" title="keepalived-02操作"></a>keepalived-02操作</h4><p>第一步：按冒号：进入末行模式输入set nu 使文件带行号显示，然后使用35gg切换光标到35行，然后按dG，删除35行以 后的所有内容 </p>
+<p>第二步：了解一下配置文件中每一行的含义19~34行 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment"># vrrp_strict		#将这个第十四行注释掉</span></span><br><span class="line">...</span><br><span class="line">vrrp_instance farm &#123;</span><br><span class="line">	state BACKUP</span><br><span class="line">	interface ens33</span><br><span class="line">	virtual_router_id 51</span><br><span class="line">	priority 90</span><br><span class="line">	advert_int 1</span><br><span class="line">	authentication &#123;</span><br><span class="line">		auth_type PASS</span><br><span class="line">		auth_pass 1111</span><br><span class="line">	&#125;</span><br><span class="line">	virtual_ipaddress &#123;</span><br><span class="line">		192.168.10.100</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设置完成后，保存并退出</p>
+<p>第三步：启动Keepalived软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start keepalived</span><br><span class="line">systemctl status keepalived</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="让Keepalived可以监测Nginx服务（keepalived-01、keepalived-02）"><a href="#让Keepalived可以监测Nginx服务（keepalived-01、keepalived-02）" class="headerlink" title="让Keepalived可以监测Nginx服务（keepalived-01、keepalived-02）"></a>让Keepalived可以监测Nginx服务（keepalived-01、keepalived-02）</h4><p>第一步：编写nginx.sh脚本，自动检测Nginx的运行状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /scripts</span><br><span class="line">vim /scripts/nginx.sh</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">nginx_status=`ps -C nginx --no-header |<span class="built_in">wc</span> -l`</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$nginx_status</span> -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">	systemctl stop keepalived</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p>第二步：给nginx.sh文件添加一个可执行权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /scripts/nginx.sh</span><br></pre></td></tr></table></figure>
+
+<p>第三步：在keepalived-01、keepalived-02两台机器的keepalived.conf文件中配置 nginx.sh脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/keepalived/keepalived.conf</span><br><span class="line">...</span><br><span class="line">vrrp_script check_nginx &#123;</span><br><span class="line">	script /scripts/nginx.sh 	<span class="comment">## 指定：&lt;外部脚本&gt;的&lt;调用路径&gt;</span></span><br><span class="line">	interval 1 					<span class="comment">## 设置：&lt;健康跟踪检测&gt;的&lt;时间间隔&gt;，默认为 1 秒</span></span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>以上只是在keepalived配置文件中定义了一个检测脚本，但是还没有真正的调用。 </p>
+<p>第四步：在vrrp_instance标签中真正调用check_nginx这个检测脚本 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vrrp_instance farm &#123;</span><br><span class="line">...</span><br><span class="line">track_script &#123;</span><br><span class="line">check_nginx</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第五步：设置完成后，重启keepalived</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> keepalived</span><br><span class="line">systemctl restart keepalived</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5、配置nginx-php（web-01、web-02）"><a href="#5、配置nginx-php（web-01、web-02）" class="headerlink" title="5、配置nginx+php（web-01、web-02）"></a>5、配置nginx+php（web-01、web-02）</h2><p>1、安装php服务和插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install php php-fpm php-curl php-intl php-mysql</span><br></pre></td></tr></table></figure>
+
+<p>2、修改nginx配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">...</span><br><span class="line">location / &#123;</span><br><span class="line">	root        /farm;</span><br><span class="line">	index       index.php index.htm;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/conf/conf.d/farm.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">location ~ \.php$ &#123;</span></span><br><span class="line"><span class="string">    root           /farm;</span></span><br><span class="line"><span class="string">    fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line"><span class="string">    fastcgi_index  index.php;</span></span><br><span class="line"><span class="string">    fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;</span></span><br><span class="line"><span class="string">    include        fastcgi_params;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>3、创建发布目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /farm</span><br></pre></td></tr></table></figure>
+
+<p>4、配置我们的php服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/php.ini</span><br><span class="line"><span class="comment">#short_open_tag，将211行short_open_tag = Off 改为 on</span></span><br></pre></td></tr></table></figure>
+
+<p>5、重启服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br><span class="line">systemctl <span class="built_in">enable</span> php-fpm</span><br><span class="line">systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="6、配置网络共享存储实现Web网页数据一致（nfs-01）"><a href="#6、配置网络共享存储实现Web网页数据一致（nfs-01）" class="headerlink" title="6、配置网络共享存储实现Web网页数据一致（nfs-01）"></a>6、配置网络共享存储实现Web网页数据一致（nfs-01）</h2><p>1、安装共享存储软件NFS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nfs-utils rpcbind</span><br></pre></td></tr></table></figure>
+
+<p>2、启动软件&amp;设置开机自启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> nfs</span><br><span class="line">systemctl start nfs</span><br></pre></td></tr></table></figure>
+
+<p>3、创建共享目录设置权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /php</span><br><span class="line">setfacl -R -m u:nfsnobody:rwx /php</span><br></pre></td></tr></table></figure>
+
+<p>4、将目录设置共享</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/php *(rw)&#x27;</span> &gt; /etc/exports.d/farm.exports</span><br><span class="line">exportfs -r</span><br><span class="line">showmount -e</span><br><span class="line">systemctl restart nfs</span><br></pre></td></tr></table></figure>
+
+<p>5、Web机器下载nfs客户端（web-01、web-02）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nfs-utils</span><br></pre></td></tr></table></figure>
+
+<p>6、挂载该项目目录（web-01、web-02）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount 192.168.100.140:/php /farm</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="7、配置农场动态页面"><a href="#7、配置农场动态页面" class="headerlink" title="7、配置农场动态页面"></a>7、配置农场动态页面</h2><p>1、下载QQ农场数据包并上传解压（web-01）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">yum -y install lrzsz		<span class="comment">##然后将farm-ucenter1.5.zip包进行上传</span></span><br><span class="line">yum -y install unzip</span><br><span class="line">unzip farm-ucenter1.5.zip	<span class="comment">##解压完会有一个upload目录</span></span><br><span class="line"><span class="built_in">cp</span> -r upload/* /farm</span><br><span class="line"><span class="built_in">cd</span> /farm</span><br><span class="line"><span class="built_in">chmod</span> 777 * -R</span><br></pre></td></tr></table></figure>
+
+<p>2、将&#x2F;farm目录中qqfarm.sql文件通过scp命令发送给mysql-01的MySQL机器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /farm/qqfarm.sql 192.168.10.15:/root/</span><br></pre></td></tr></table></figure>
+
+<h2 id="PS：解决报错问题"><a href="#PS：解决报错问题" class="headerlink" title="PS：解决报错问题"></a>PS：解决报错问题</h2><p>之前许多人做错了导致数据库连接出问题，所以我们需要</p>
+<p>1、删除&#x2F;farm目录中所有的文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf /farm/*</span><br></pre></td></tr></table></figure>
+
+<p>然后执行第七大点的操作</p>
+<p>报错后数据库的解决办法在数据库节点下面</p>
+<h2 id="8、配置MySQL数据库（mysql-01）"><a href="#8、配置MySQL数据库（mysql-01）" class="headerlink" title="8、配置MySQL数据库（mysql-01）"></a>8、配置MySQL数据库（mysql-01）</h2><p>1、MySQL的安装与初始化设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装mysql</span></span><br><span class="line">yum -y install mariadb-server mariadb</span><br><span class="line">systemctl <span class="built_in">enable</span> mariadb</span><br><span class="line">systemctl start mariadb</span><br><span class="line"><span class="comment">#设置MySQL登录密码</span></span><br><span class="line">初始密码可用来登录，建议我们进入mysql后还是需要修改一下密码</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">语法：</span><br><span class="line">mysqladmin -u root -p<span class="string">&#x27;旧密码&#x27;</span> password <span class="string">&#x27;新密码&#x27;</span>   <span class="comment">#这个不需要进入mysql内就能修改</span></span><br><span class="line">案例:</span><br><span class="line">mysqladmin -u root -p<span class="string">&#x27;旧密码&#x27;</span> password <span class="string">&#x27;Blue@123&#x27;</span></span><br><span class="line">回车两下即可</span><br></pre></td></tr></table></figure>
+
+<p>2、创建farm库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p<span class="string">&#x27;Blue@123&#x27;</span></span><br><span class="line">mysql&gt; create database farm;</span><br><span class="line">mysql&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<p> 3、在MySQL服务端，账号登陆并将传输的数据文件导入到新建的farm库中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p<span class="string">&#x27;Blue@123&#x27;</span> farm &lt; /root/qqfarm.sql</span><br></pre></td></tr></table></figure>
+
+<p>4、允许web服务端登陆数据库，需要数据库更改授权，然后重新加载授权表，注意数据库登陆进去以后，命令结尾都要加上；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p<span class="string">&#x27;Blue@123&#x27;</span></span><br><span class="line">create user <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified by <span class="string">&#x27;Blue@123&#x27;</span>;</span><br><span class="line">grant all on *.* to <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">flush privileges;</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="PS：数据库报错的解决办法"><a href="#PS：数据库报错的解决办法" class="headerlink" title="PS：数据库报错的解决办法"></a>PS：数据库报错的解决办法</h2><p>我们需要登陆MySQL，删除原来在farm库，创建新库然后导入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p<span class="string">&#x27;Blue@123&#x27;</span></span><br><span class="line">drop database farm;</span><br><span class="line">然后重复执行一遍第八大点的2、3、4小点</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="9、web服务器端重新启动（web-01、web-02）"><a href="#9、web服务器端重新启动（web-01、web-02）" class="headerlink" title="9、web服务器端重新启动（web-01、web-02）"></a>9、web服务器端重新启动（web-01、web-02）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br><span class="line">systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
+
+
+
+<p>五、浏览器访问（访问web-01的ip进行网站安装，安装完毕后再用vip进行访问）</p>
+<p>1、在浏览器端输入服务端地址访问，根据提示修改权限</p>
+<h5 id="注意数据库服务器一栏填写数据库机器的ip地址"><a href="#注意数据库服务器一栏填写数据库机器的ip地址" class="headerlink" title="注意数据库服务器一栏填写数据库机器的ip地址"></a>注意数据库服务器一栏填写数据库机器的ip地址</h5><p><img src="https://img-blog.csdnimg.cn/20200419122932403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>这里下面三个选一个当主页</p>
+<p><img src="https://img-blog.csdnimg.cn/20200419122945986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200419123043853.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>点完成后会开一个新界面，我们就可以浏览了，这里我们点网络家园</p>
+<p><img src="https://img-blog.csdnimg.cn/20200419123357225.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>可以看到我们的qq农场，那到底能不能显示出来呢？我们试一试</p>
+<p><img src="https://img-blog.csdnimg.cn/20200419123754413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><a class="post-copyright__author_img" href="/about/"><img class="post-copyright__author_img_front" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg"></a><div class="post-copyright__author_name">CookiesL</div><div class="post-copyright__author_desc">您吃了吗？</div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div><div class="post-reward"><div class="reward-button" title="赞赏作者" onclick="AddRewardMask()"><i class="solitude fa-solid fa-heart"></i>赞赏作者</div><div class="reward-main"><ul class="reward-all"><span class="reward-title">今天星期四？</span><ul class="reward-group"><li class="reward-item"><a target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0"><img class="post-qr-code-img nolazyload" src="https://www.helloimg.com/i/2024/11/30/674aea304cfff.jpg" alt="VWO 50!" style="border-color: var(--efu-black)"></a><div class="post-qr-code-desc">VWO 50!</div></li></ul><a class="reward-main-btn" href="/about/"><div class="reward-text">赞赏名单</div><div class="reward-dec"></div></a></ul></div></div><script>function RemoveRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "none";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "none";
+    }
+}
+
+function AddRewardMask() {
+    let rewardMainElements = document.querySelectorAll(".reward-main");
+    let quitBoxElement = document.querySelector("#quit-box");
+
+    rewardMainElements.forEach(element => {
+        element.style.display = "flex";
+    });
+
+    if (quitBoxElement) {
+        quitBoxElement.style.display = "flex";
+    }
+}</script></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本文是原创文章，采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>协议，完整转载请注明来自<a href="/">CookiesL</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Nginx搭建与管理</div></div></a></div></nav></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© NaN - 2024 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg">CookiesL</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" alt="Theme">Theme</a></div></div></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script>var meting_api = 'https://meting.everfu.cn/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><div class="js-pjax"></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--><div class="needEndHide" id="nav-music"><div id="nav-music-hoverTips" onclick="sco.musicToggle()">音乐已暂停</div><meting-js id="939590436" server="netease" type="playlist" mutex="true" preload="none" theme="var(--efu-main)" data-lrctype="0" order="random" volume="0.5"></meting-js></div></body></html>
+        <script>
+            const posts = ["2024/11/30/QQ农场搭建方案/","2024/11/30/Nginx搭建与管理/","2024/11/30/Linux操作基础/","2024/11/30/MQTT/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
