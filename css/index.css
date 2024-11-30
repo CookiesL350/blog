@@ -1640,7 +1640,7 @@ body {
   min-height: 100%;
   background: var(--efu-background);
   color: var(--efu-fontcolor);
-  font-size: 16px;
+  font-size: 20px;
   font-family: PingFang SC, Hiragino Sans GB, Microsoft YaHei;
   line-height: 2;
   -webkit-tap-highlight-color: transparent;
@@ -1742,7 +1742,7 @@ kbd,
 samp,
 pre {
   font-family: "monospace", monospace;
-  font-size: 16px;
+  font-size: 20px;
 }
 small {
   font-size: 80%;
@@ -2037,21 +2037,6 @@ span.tags-punctuation i {
 #post-info span.tags-punctuation i {
   font-size: 14px;
   line-height: 32px;
-}
-#global_bg {
-  position: fixed;
-  z-index: 999;
-  opacity: 0.2;
-  width: 100%;
-  height: 100%;
-  background-image: url("https://www.helloimg.com/i/2024/11/30/674b139647022.jpg");
-  background-size: cover;
-  background-position: center;
-  pointer-events: none;
-  background-repeat: no-repeat;
-}
-[data-theme=dark] #global_bg {
-  background-image: url("https://www.helloimg.com/i/2024/11/30/674b0bc7362f8.jpg");
 }
 .article-container {
   overflow-wrap: break-word;
@@ -3808,24 +3793,6 @@ span.tags-punctuation i {
   color: var(--efu-white);
   background: var(--efu-main);
   transform: scale(1.1);
-}
-#footer #footer_deal .footer_mini_logo {
-  width: 50px;
-  height: 50px;
-  margin: 0 1rem;
-  cursor: pointer;
-  transition: cubic-bezier(0, 0, 0, 1.29) 0.5s;
-  user-select: none;
-  border-radius: 50px;
-  overflow: hidden;
-}
-@media screen and (max-width: 768px) {
-  #footer #footer_deal .footer_mini_logo {
-    display: none;
-  }
-}
-#footer #footer_deal .footer_mini_logo:hover {
-  transform: scale(1.2);
 }
 #footer #st-footer {
   display: flex;
