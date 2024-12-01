@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>音乐馆 | CookiesL</title><noscript>开启JavaScript才能访问本站哦~</noscript><link rel="icon" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=2.1.10"><!-- inject head--><link rel="canonical" href="http://cookeisl.top/music/"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.min.css"><!-- katex--><!-- Open Graph--><meta name="description" content="音乐馆"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="CookiesL"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg"><link rel="apple-touch-icon" href="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" sizes="180x180"><script>console.log(' %c Solitude %c ' + '2.1.10' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined)
+        document.documentElement.setAttribute('data-theme', 'dark');
+    else
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    typeof rm === 'object' && rm.mode(cachedMode === undefined || cachedMode === 'dark')
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: undefined,
+    runtime: '2024-11-30 18:00:00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"已切换至深色模式","light":"已切换至浅色模式"},"copy":{"success":"复制成功","error":"复制失败"},"backtop":"返回顶部","time":{"day":"天前","hour":"小时前","just":"刚刚","min":"分钟前","month":"个月前"},"day":" 天","f12":"开发者模式已打开，请遵循GPL协议。","totalk":"无需删除空行，直接输入评论即可","barrage":{"title":"热评"}},
+    aside: {
+        sayhello: {
+            morning: "✨ 在上班的路上吗？",
+            noon: "🍲 事已至此，先干饭吧",
+            afternoon: "🌞 准时下班！！",
+            night: "累了就听会歌吧 🎵",
+            goodnight: "emo 😴",
+        },
+        sayhello2: [],
+        sayhello3: {
+            prefix: '好久不见，',
+            back: '欢迎再次回来，',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: {"avatar":"https://gravatar.com/avatar","commentBarrage":true},
+    lightbox: 'fancybox',
+    post_ai: false,
+    right_menu: false,
+    translate: {"translateDelay":0,"defaultEncoding":2},
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: false,
+    is_page: true,
+    is_home: false,
+    page: 'music',
+    toc: false,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body" data-type="music"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fa-solid fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">互动</div><div class="author-content-item-title">最新评论</div></div><div class="console_recentcomments"></div></div></div><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">标签</div><div class="author-content-item-title">寻找感兴趣的领域</div></div><div class="card-tag-cloud"></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">2024/11</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span class="card-archive-list-count-unit">篇</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="昼夜切换"><i class="solitude fa-solid fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="边栏显示控制"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div><div class="console-btn-item" id="consoleKeyboard" onclick="sco.switchKeyboard()"><span class="keyboardSwitch" title="键盘快捷键"><i class="solitude fa-solid fa-keyboard"></i></span></div><div class="console-btn-item" id="consoleMusic" onclick="sco.musicToggle()"><span class="music-switch" title="音乐开关"><i class="solitude fa-solid fa-compact-disc"></i></span></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="sco.switchCommentBarrage()"><span class="commentBarrage"><i class="solitude fa-solid fa-comment"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a></div></div></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fa-solid fa-circle-half-stroke"></i><span>显示模式</span></span></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">测试</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil"><span class="back-menu-item-text">bilbil</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/1702485130?spm_id_from=333.999.0.0" title="我潮哥的B站"><span class="back-menu-item-text">我潮哥的B站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">测试1</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil1"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil1"><span class="back-menu-item-text">bilbil1</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil2"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil2"><span class="back-menu-item-text">bilbil2</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil3"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil3"><span class="back-menu-item-text">bilbil3</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil4"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil4"><span class="back-menu-item-text">bilbil4</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文库</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>全部文章</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/tlink/"><i class="solitude  fas fa-toolbox"></i><span>在线工具</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-widget card-tags card-archives card-webinfo card-allinfo"><div class="card-tag-cloud"></div></div></div></div><!-- keyboard--><div id="keyboard-tips"><div class="keyboardTitle">博客快捷键</div><div class="keyboardList"><div class="keyboardItem"><div class="keyGroup"><div class="key">Shift</div><div class="key">K</div></div><div class="keyContent"><div class="content">关闭快捷菜单</div></div></div><div class="keyboardItem"><div class="keyGroup"><div class="key">Shift</div><div class="key">A</div></div><div class="keyContent"><div class="content">打开控制台</div></div></div><div class="keyboardItem"><div class="keyGroup"><div class="key">Shift</div><div class="key">M</div></div><div class="keyContent"><div class="content">播放/暂停音乐</div></div></div></div></div><script>const keyboard_addKeyup = (e) => {
+    if (e.key === 'Shift') {
+        document.getElementById('keyboard-tips').classList.remove('show');
+    }
+}
+
+const keyboard_addKeydown = (e) => {
+    const keyboards = [{"name":"关闭快捷菜单","key":"K","func":"keyboard"},{"name":"打开控制台","key":"A","sco":"showConsole"},{"name":"播放/暂停音乐","key":"M","sco":"musicToggle"}];
+    if (e.keyCode === 16) {
+        document.getElementById('keyboard-tips').classList.add('show');
+    }
+
+    for (let i = 0; i < keyboards.length; i++) {
+        if (keyboards[i].url) {
+            if (keyboards[i].url.startsWith('http')) {
+                if (e.key === keyboards[i].key) {
+                    window.open(keyboards[i].url);
+                }
+            } else {
+                if (e.key === keyboards[i].key) {
+                    pjax.loadUrl(keyboards[i].url);
+                }
+            }
+        } else if (keyboards[i].sco) {
+            if (e.key === keyboards[i].key) {
+                sco[keyboards[i].sco]();
+            }
+        } else if (keyboards[i].func) {
+            if (e.key === keyboards[i].key) {
+                window[keyboards[i].func]();
+            }
+        }
+    }
+}
+
+function openKeyboard() {
+
+    window.addEventListener('keyup', keyboard_addKeyup);
+
+    window.addEventListener('keydown', keyboard_addKeydown);
+}
+function closeKeyboard() {
+
+    window.removeEventListener('keyup', keyboard_addKeyup);
+
+    window.removeEventListener('keydown', keyboard_addKeydown);
+}
+
+var sco_keyboards = localStorage.getItem('keyboard') === 'true'
+if (sco_keyboards) {
+    openKeyboard();
+    let keyboard = document.getElementById('consoleKeyboard');
+    keyboard?.classList.add('on');
+}</script><!-- righhtside--><div id="rightside"><div class="rs_hide"><button class="keyboard pc" type="button" title="键盘快捷键" onclick="sco.switchKeyboard()"><i class="fas fa-keyboard"></i></button></div><div class="rs_show"><button class="comment" type="button" title="评论" onclick="sco.scrollTo('post-comment')"><i class="fas fa-comment"></i></button><button class="barrage pc" type="button" title="弹" onclick="sco.switchCommentBarrage()"><span>弹</span></button><button class="top" type="button" title="返回顶部" onclick="sco.toTop()"><i class="fas fa-arrow-up"></i><span id="percent">0</span></button></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><div class="back-home-button" tabindex="-1"><i class="back-home-button-icon solitude fas fa-bars-progress"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">测试</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil"><span class="back-menu-item-text">bilbil</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/1702485130?spm_id_from=333.999.0.0" title="我潮哥的B站"><span class="back-menu-item-text">我潮哥的B站</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">测试1</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil1"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil1"><span class="back-menu-item-text">bilbil1</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil2"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil2"><span class="back-menu-item-text">bilbil2</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil3"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil3"><span class="back-menu-item-text">bilbil3</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://space.bilibili.com/98624080?spm_id_from=333.788.0.0" title="bilbil4"><img class="nolazyload back-menu-item-icon" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg" alt="bilbil4"><span class="back-menu-item-text">bilbil4</span></a></div></div></div></div><a id="site-name" href="/" title="返回博客主页"><span class="title">没准是主页(◑ .◐)</span><i class="solitude fa-solid fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">音乐馆</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>文库</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="solitude  fas fa-folder-closed"></i><span>全部文章</span></a></li><li><a class="site-page child" href="/categories/"><i class="solitude  fas fa-clone"></i><span>全部分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="solitude  fas fa-tags"></i><span>全部标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span>关于</span></a><ul class="menus_item_child"><li><a class="site-page child" href="/tlink/"><i class="solitude  fas fa-toolbox"></i><span>在线工具</span></a></li><li><a class="site-page child" href="/music/"><i class="solitude  fas fa-music"></i><span>音乐馆</span></a></li></ul></div></div></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="中控台" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fa-solid fa-bars"></i></a></div></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="page"><div id="Music-bg"></div><div id="Music-page"><meting-js id="939590436" server="netease" type="playlist" mutex="true" volume="0.8" preload="none" data-lrctype="0" order="list"></meting-js></div><div class="Music-loading"><div>APlayer加载中...</div></div><script pjax>(async function () {
+    if (typeof initializeMusicPlayer === "undefined") await utils.getScript('/js/music.js?v=2.1.10').then(() => initializeMusicPlayer())
+    else initializeMusicPlayer()
+})()</script><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fa-solid fa-comment"></i><span> 评论</span></div></div><div class="comment-wrap"><div id="giscus-wrap"></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2024 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src="https://www.helloimg.com/i/2024/11/30/674ae51b324ab.jpg">CookiesL</a></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/everfu/hexo-theme-solitude" alt="Theme">Theme</a></div></div></div><div class="comment-barrage needEndHide"></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=2.1.10"></script><script src="/js/main.js?v=2.1.10"></script><script src="/js/third_party/waterfall.min.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pjax/0.2.8/pjax.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script src="/js/third_party/universe.min.js?v=2.1.10"></script><script>dark()
+</script><script src="/js/tw_cn.js?v=2.1.10"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/node-snackbar/0.1.16/snackbar.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.36/fancybox/fancybox.umd.min.js"></script><script>var meting_api = 'https://meting.qjqq.cn/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/meting/2.0.1/Meting.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><div class="js-pjax"><script>(()=>{
+    const getGiscusTheme = theme => {
+        return theme === 'dark' ? 'dark' : 'light'
+    }
+
+    const loadGiscus = () => {
+        const config = Object.assign({
+            src: 'https://giscus.app/client.js',
+            'data-repo': 'CookiesL350/giscus',
+            'data-repo-id': 'R_kgDONW_8_g',
+            'data-category-id': 'DIC_kwDONW_8_s4Ckwfa',
+            'data-mapping': 'pathname',
+            'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+            'data-reactions-enabled': '1',
+            crossorigin: 'anonymous',
+            async: true
+        },null)
+
+        const ele = document.createElement('script')
+        for (let key in config) {
+            ele.setAttribute(key, config[key])
+        }
+        document.getElementById('giscus-wrap').appendChild(ele)
+    }
+
+    const changeGiscusTheme = theme => {
+        const sendMessage = message => {
+            const iframe = document.querySelector('iframe.giscus-frame')
+            if (!iframe) return
+            iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+        }
+
+        sendMessage({
+            setConfig: {
+                theme: getGiscusTheme(theme)
+            }
+        });
+    }
+
+    utils.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+    if ('Giscus' === 'Giscus' || !false) {
+        if (false) {
+            const giscusWrap = document.getElementById('giscus-wrap')
+            if (giscusWrap) {
+                utils.loadComment(giscusWrap, loadGiscus)
+            }
+        } else {
+            loadGiscus()
+        }
+    } else {
+        window.loadTwoComment = loadGiscus
+    }
+})()</script></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><!-- Tianli-Talk--><!-- music--><div class="needEndHide" id="nav-music"><div id="nav-music-hoverTips" onclick="sco.musicToggle()">音乐已暂停</div><meting-js id="939590436" server="netease" type="playlist" mutex="true" preload="none" theme="var(--efu-main)" data-lrctype="0" order="random" volume="0.5"></meting-js></div></body></html>
+        <script>
+            const posts = ["2024/11/30/QQ农场搭建方案/","2024/11/30/Nginx搭建与管理/","2024/11/30/Linux操作基础/","2024/11/30/MQTT/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
