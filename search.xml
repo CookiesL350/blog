@@ -1,81 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux操作基础</title>
-    <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
-<p>[cxk@localhost root]$</p>
-<h2 id="二、Linux帮助信息的查询"><a href="#二、Linux帮助信息的查询" class="headerlink" title="二、Linux帮助信息的查询"></a>二、Linux帮助信息的查询</h2><h3 id="1、Linux命令的种类"><a href="#1、Linux命令的种类" class="headerlink" title="1、Linux命令的种类"></a>1、Linux命令的种类</h3><p>内嵌命令：Linux内核自带的命令</p>
-<p>外部命令：后期安装才能使用的命令</p>
-<h3 id="2、区分命令类型"><a href="#2、区分命令类型" class="headerlink" title="2、区分命令类型"></a>2、区分命令类型</h3><p>命令：type<br>作用：检测命令类型<br>语法格式：type被查询的命令	cd	ls</p>
-<h3 id="3、帮助信息的查询"><a href="#3、帮助信息的查询" class="headerlink" title="3、帮助信息的查询"></a>3、帮助信息的查询</h3><p>内嵌命令<br>    help被查询的命令<br>外部命令<br>    被查询的命令 –help</p>
-<h2 id="三、Linux命令的基础语法格式"><a href="#三、Linux命令的基础语法格式" class="headerlink" title="三、Linux命令的基础语法格式"></a>三、Linux命令的基础语法格式</h2><p>命令由三部分组成</p>
-<p>命令	选项	参数<br>动作	补充	操作对象</p>
-<p>案例：<br>命令：ls<br>作用:查看目录下的文件名（默认查看当前目录）<br>语法格式：ls [选项]… [文件]…</p>
-<p>[]：表示该项内容根据情况，可以写可以不写<br>…：表示该项内容根据情况，可以写一个或多个</p>
-<h1 id="2-文件管理"><a href="#2-文件管理" class="headerlink" title="2)文件管理"></a>2)文件管理</h1><h2 id="一、认识Linux目录树"><a href="#一、认识Linux目录树" class="headerlink" title="一、认识Linux目录树"></a>一、认识Linux目录树</h2><p>了解Linux系统和windows系统的目录结构区别<br>Linux是一个单目录树结构，可以理解为只有c盘的操作系统<br>命令：tree（需要手动下载：yum -y install tree）<br>作用：以树状图来列出目录的内容<br>&#x2F; （简称为 根目录）<br>├── bin -&gt; usr&#x2F;bin<br>├── boot<br>├── dev<br>├── etc——————存放配置文件的文件夹<br>├── home————普通用户的家目录<br>├── lib -&gt; usr&#x2F;lib<br>├── lib64 -&gt; usr&#x2F;lib64<br>├── media<br>├── mnt<br>├── opt<br>├── proc<br>├── root————超级管理员的家目录<br>├── run<br>├── sbin -&gt; usr&#x2F;sbin<br>├── srv<br>├── sys<br>├── tmp————存放临时（缓存）文件的目录<br>├── usr<br>└── var</p>
-<p>路径的种类<br>绝对路径：从&#x2F;  目录开始描述的文件或者目录的位置信息</p>
-<p>相对路径：从当前目录开始描述的文件或者目录的位置信息</p>
-<h2 id="二、切换目录路径"><a href="#二、切换目录路径" class="headerlink" title="二、切换目录路径"></a>二、切换目录路径</h2><p>命令：cd<br>作用：切换命令<br>语法格式：cd 目录路径<br>案例：<br>    cd &#x2F;etc&#x2F;rc.d&#x2F;init.d&#x2F;<br>特殊用法：<br>    cd .. : 返回上一层<br>    cd - : 返回上一次所在目录<br>    cd 或者 cd ~ ：回家</p>
-<h2 id="三、Linux文件类型（Linux系统内一切皆是文件）"><a href="#三、Linux文件类型（Linux系统内一切皆是文件）" class="headerlink" title="三、Linux文件类型（Linux系统内一切皆是文件）"></a>三、Linux文件类型（Linux系统内一切皆是文件）</h2><p>普通文件：-<br>目录文件：d<br>链接文件：l<br>块设备文件：b<br>字符设备文件：c<br>套接字文件：s<br>管道文件：p</p>
-<h2 id="四、文件和目录的基本操作（增删改查）"><a href="#四、文件和目录的基本操作（增删改查）" class="headerlink" title="四、文件和目录的基本操作（增删改查）"></a>四、文件和目录的基本操作（增删改查）</h2><h3 id="1、创建文件或者目录"><a href="#1、创建文件或者目录" class="headerlink" title="1、创建文件或者目录"></a>1、创建文件或者目录</h3><p>mkdir<br>作用：创建目录<br>语法格式：mkdir [选项] 目录名…<br>常用选项：<br>    -p：创建多级目录（自动创建目录中缺失的父目录）</p>
-<p>touch<br>作用：创建文件<br>语法格式：touch 文件名</p>
-<h3 id="2、rm"><a href="#2、rm" class="headerlink" title="2、rm"></a>2、rm</h3><p>作用：删除文件<br>语法格式：rm[选项]… 文件名…<br>常用选项：<br>    -r：删除目录<br>    -f：不询问，强制删除<br>注意事项：<br>    rm -rf * ：表示删除当前目录下的所有文件，使用时注意当前所在路径<br>    rm -rf &#x2F;* ：这是传说中删跟跑路，千万不要使用</p>
-<h3 id="3、更改文件或者目录"><a href="#3、更改文件或者目录" class="headerlink" title="3、更改文件或者目录"></a>3、更改文件或者目录</h3><p>cp<br>作用：拷贝文件<br>语法格式：cp[选项] 源文件地址 目标文件地址<br>常用选项：<br>    -r：拷贝目录</p>
-<p>mv<br>作用：移动文件和目录<br>语法格式：mv 源文件地址 目标文件地址</p>
-<h3 id="4、查看文件和目录内容"><a href="#4、查看文件和目录内容" class="headerlink" title="4、查看文件和目录内容"></a>4、查看文件和目录内容</h3><p>查看目录内容<br>ls<br>（略略）</p>
-<p>查看文件内容<br>cat		（只适用于查看内容较少的文件）<br>命令：输出文件所有内容<br>语法格式：cat [选项] 文件名<br>常用选项：<br>    -n：带行号显示文件内容</p>
-<p>head<br>作用：从文件开头查看<br>语法格式：head [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
-<p>tail<br>作用：从文件结尾查看<br>语法格式：tail [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
-<p>扩展内容<br>管道符 | ：将前一个命令的输出结果作为后面一个命令的操作对象</p>
-<h1 id="3-vim编辑器"><a href="#3-vim编辑器" class="headerlink" title="3)vim编辑器"></a>3)vim编辑器</h1><p>vi&#x2F;vim文本编辑器<br>vim是vi的全面升级版，vim需要后期手动下载（yum -y install vim）<br>以下 vi&#x2F;vim 简称 vim</p>
-<p>命令：vim<br>作用：文本编辑器<br>语法格式：vim [选项] 文件名</p>
-<h2 id="一、vim的三种工作模式"><a href="#一、vim的三种工作模式" class="headerlink" title="一、vim的三种工作模式"></a>一、vim的三种工作模式</h2><p>命令模式（默认模式）：通过快捷键指令可以进行复制粘贴拷贝等操作</p>
-<p>编辑模式：可以进行正常的文本内容书写</p>
-<p>末行模式：可以进行保存退出以及编辑环境的配置等操作<br>       特征：左下角有：字样，且后面有绿色光标</p>
-<p>三种模式的切换：<br>        按esc———&gt;	        &lt;———按esc键<br>编辑模式&lt;————————————&gt;命令模式&lt;————————————&gt;末行模式<br>         &lt;————按i				     打：——&gt;</p>
-<p>命令模式下的操作：<br>    gg：跳转到第一行行首<br>    ngg：跳转到第n行行首（n是数字）<br>    G：跳转到文章末行行首<br>    yy:复制光标当前所在行<br>    nyy：复制光标当前所在行往下数n行（n是数字）<br>    dd：剪切光标当前所在行（不粘贴可以当做删除来用）<br>    ndd：剪切光标当前所在行往下数n行（n是数字）<br>    p（P）：将内容粘贴至光标所在行的下（上）一行<br>    dG：将光标所在行到文章末行全部剪切（删除0）<br>    u：撤回<br>    Ctrl + r：撤回我的撤回</p>
-<p>编辑模式下的操作：<br>    正常操作</p>
-<p>末行模式下的操作：<br>    q ：直接退出<br>    q!：强制退出<br>    w：保存<br>    wq：保存退出<br>    wq!：强制退出<br>    set nu:带行号显示<br>    set nonu：取消行号显示</p>
-<h1 id="4-压缩与归档"><a href="#4-压缩与归档" class="headerlink" title="4)压缩与归档"></a>4)压缩与归档</h1><h2 id="一、了解压缩格式"><a href="#一、了解压缩格式" class="headerlink" title="一、了解压缩格式"></a>一、了解压缩格式</h2><p>Windows：zip、rar、7z<br>Linux：gzip（gz）、bzip2（bz2）、xz</p>
-<h2 id="二、压缩软件"><a href="#二、压缩软件" class="headerlink" title="二、压缩软件"></a>二、压缩软件</h2><p>命令：gzip<br>作业：压缩工具<br>语法格式：gzip [选项]… 文件名…<br>常用选项：<br>    -r：对目录操作（把目录下的所有文件单独操作）<br>    -d：解压</p>
-<h2 id="三、归档与解归档"><a href="#三、归档与解归档" class="headerlink" title="三、归档与解归档"></a>三、归档与解归档</h2><p>命令：tar<br>作用：打包和解包<br>语法格式：tar[选项]… 文件名…<br>常用选项：<br>    -c：打包<br>    -x：解包<br>    -t：看包<br>    -v：看操作过程<br>    -f：指定包的名称<br>    -a：自动压缩&#x2F;解压<br>    -C：将内容解压至指定的文件路径去</p>
-<h1 id="5-用户管理"><a href="#5-用户管理" class="headerlink" title="5)用户管理"></a>5)用户管理</h1><h2 id="一、用户和组的概念"><a href="#一、用户和组的概念" class="headerlink" title="一、用户和组的概念"></a>一、用户和组的概念</h2><p>Linux系统里面的用户：对操作系统实现不同功能身份的人<br>组：一个或多个用户的集合<br>对一个组进行授权，就相当于对这个组里面所有的人进行授权，提高了我们授权管理的效率</p>
-<h3 id="1、用户和组的关系"><a href="#1、用户和组的关系" class="headerlink" title="1、用户和组的关系"></a>1、用户和组的关系</h3><p>用户可以加入一个组，也可以加入多个组<br>组里面可以没有用户，也可以有多个用户<br>对用户来讲，组分为两种，一种叫做主要组，一种叫做附加组<br>主要组有且只能有一个，附加组可以没有，也可以有多个</p>
-<h2 id="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"><a href="#二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）" class="headerlink" title="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"></a>二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）</h2><p>超级管理员 就是uid为0的用户<br>    注意事项：只要uid为0，它就是超级管理员，拥有最大的特权<br>        gid为0，不意味着拥有特权<br>系统用户也是普通账户，没有特权，一般不可以登录系统，专用程序的运行<br>    uid范围：1-999<br>普通用户就是普通账户，没有特权，一般可以登录系统，专用于人的登录操作<br>    uid范围：1000-？</p>
-<h2 id="三、用户的查询"><a href="#三、用户的查询" class="headerlink" title="三、用户的查询"></a>三、用户的查询</h2><p>命令：id<br>语法格式：id 用户名</p>
-<h2 id="四、了解-etc-passwd文件"><a href="#四、了解-etc-passwd文件" class="headerlink" title="四、了解&#x2F;etc&#x2F;passwd文件"></a>四、了解&#x2F;etc&#x2F;passwd文件</h2><p>passwd文件保存着系统上所有用户的信息<br>用户名称代指密码:uid:gid:描述信息:家目录:登录环境</p>
-<h2 id="五、了解-etc-shadow文件"><a href="#五、了解-etc-shadow文件" class="headerlink" title="五、了解&#x2F;etc&#x2F;shadow文件"></a>五、了解&#x2F;etc&#x2F;shadow文件</h2><p>这个文件保存着所以用户的加密密码</p>
-<h2 id="六、了解-etc-skel-目录"><a href="#六、了解-etc-skel-目录" class="headerlink" title="六、了解&#x2F;etc&#x2F;skel&#x2F;目录"></a>六、了解&#x2F;etc&#x2F;skel&#x2F;目录</h2><p>用户的家目录模板</p>
-<h2 id="七、创建用户"><a href="#七、创建用户" class="headerlink" title="七、创建用户"></a>七、创建用户</h2><p>命令：useradd<br>语法格式：useradd [选项]… 用户名<br>注意事项：创建用户时，如果没有指定用户的主要组，那么系统就会创建一个与该用户同名的组，<br>并将这个组作为这个用户的主要组<br>常用选项：<br>    -s：设置用户的登录环境<br>    -M：不给用户设置家目录<br>    如何创建一个给程序使用的账户（不给登录系统）<br>    答：useradd -M -s &#x2F;sbin&#x2F;nologin ikun</p>
-<h2 id="八、配置用户密码"><a href="#八、配置用户密码" class="headerlink" title="八、配置用户密码"></a>八、配置用户密码</h2><p>命令：passwd<br>语法格式：passwd [用户名]</p>
-<p>一、了解权限<br>权限就是权利的限制，主要是针对于普通用户</p>
-<p>二、查看权限<br>我们可以使用ls-l的命令来进行文件属性的查看，其中就有我们的文件权限</p>
-<h1 id="6-权限管理"><a href="#6-权限管理" class="headerlink" title="6)权限管理"></a>6)权限管理</h1><p>总用量 4<br>-rw——-. 1 root root 1241 11月 12 15:36 anaconda-ks.cfg</p>
-<p>其中开头-rw——- 这一段里面，最前面的 - 表示文件类型标识符（这是一个普通文件），<br>后面的这一段共九位 rw——- 就是我们文件的权限标识符</p>
-<p>三、unix基础权限（也叫做ugo基础权限）<br> 对文件来讲，可以把用户分为三个大类<br>    u: 文件的所有者<br>        文件的所有者一般是文件的创建者<br>    g: 文件的所属组成员<br>        文件的所属组一般是文件创建者的主要组<br>        注意事项：对组授权一般就是对整个组的用户进行授权<br>    o: 其他人<br>        既不是文件所有者，也不是文件所属组成员的用户，我们统称为其他人</p>
-<pre><code>    名称		对目录型文件	对非目录型文件
-r	可读权限		查看目录内容	查看文件内容
-w	可写		更改目录文件内容	更改文件内容
-x	可执行		进入目录		执行文件
-            （目录没有x权限，即使有rw权限也使用不了）
-
-文件的权限位有九位，unix权限对应的身份有三种，所以每个身份有三个权限位表示获得
-的权限
-以下图权限为例
-    rw-------			
-详解：       rw-			---			---
-    第一个三位是所有者的权限	第二个三位是所属组的权限	第三个三位表示的是其他人的权限
-</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>MQTT</title>
-    <url>/2024/11/30/MQTT/</url>
-    <content><![CDATA[<p> 测试用</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Nginx搭建与管理</title>
     <url>/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
@@ -169,6 +94,81 @@ x	可执行		进入目录		执行文件
 <p>4、编写php页面</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/html/index.php &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">            phpinfo();</span></span><br><span class="line"><span class="string">?&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
 
+]]></content>
+  </entry>
+  <entry>
+    <title>MQTT</title>
+    <url>/2024/11/30/MQTT/</url>
+    <content><![CDATA[<p> 测试用</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Linux操作基础</title>
+    <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
+<p>[cxk@localhost root]$</p>
+<h2 id="二、Linux帮助信息的查询"><a href="#二、Linux帮助信息的查询" class="headerlink" title="二、Linux帮助信息的查询"></a>二、Linux帮助信息的查询</h2><h3 id="1、Linux命令的种类"><a href="#1、Linux命令的种类" class="headerlink" title="1、Linux命令的种类"></a>1、Linux命令的种类</h3><p>内嵌命令：Linux内核自带的命令</p>
+<p>外部命令：后期安装才能使用的命令</p>
+<h3 id="2、区分命令类型"><a href="#2、区分命令类型" class="headerlink" title="2、区分命令类型"></a>2、区分命令类型</h3><p>命令：type<br>作用：检测命令类型<br>语法格式：type被查询的命令	cd	ls</p>
+<h3 id="3、帮助信息的查询"><a href="#3、帮助信息的查询" class="headerlink" title="3、帮助信息的查询"></a>3、帮助信息的查询</h3><p>内嵌命令<br>    help被查询的命令<br>外部命令<br>    被查询的命令 –help</p>
+<h2 id="三、Linux命令的基础语法格式"><a href="#三、Linux命令的基础语法格式" class="headerlink" title="三、Linux命令的基础语法格式"></a>三、Linux命令的基础语法格式</h2><p>命令由三部分组成</p>
+<p>命令	选项	参数<br>动作	补充	操作对象</p>
+<p>案例：<br>命令：ls<br>作用:查看目录下的文件名（默认查看当前目录）<br>语法格式：ls [选项]… [文件]…</p>
+<p>[]：表示该项内容根据情况，可以写可以不写<br>…：表示该项内容根据情况，可以写一个或多个</p>
+<h1 id="2-文件管理"><a href="#2-文件管理" class="headerlink" title="2)文件管理"></a>2)文件管理</h1><h2 id="一、认识Linux目录树"><a href="#一、认识Linux目录树" class="headerlink" title="一、认识Linux目录树"></a>一、认识Linux目录树</h2><p>了解Linux系统和windows系统的目录结构区别<br>Linux是一个单目录树结构，可以理解为只有c盘的操作系统<br>命令：tree（需要手动下载：yum -y install tree）<br>作用：以树状图来列出目录的内容<br>&#x2F; （简称为 根目录）<br>├── bin -&gt; usr&#x2F;bin<br>├── boot<br>├── dev<br>├── etc——————存放配置文件的文件夹<br>├── home————普通用户的家目录<br>├── lib -&gt; usr&#x2F;lib<br>├── lib64 -&gt; usr&#x2F;lib64<br>├── media<br>├── mnt<br>├── opt<br>├── proc<br>├── root————超级管理员的家目录<br>├── run<br>├── sbin -&gt; usr&#x2F;sbin<br>├── srv<br>├── sys<br>├── tmp————存放临时（缓存）文件的目录<br>├── usr<br>└── var</p>
+<p>路径的种类<br>绝对路径：从&#x2F;  目录开始描述的文件或者目录的位置信息</p>
+<p>相对路径：从当前目录开始描述的文件或者目录的位置信息</p>
+<h2 id="二、切换目录路径"><a href="#二、切换目录路径" class="headerlink" title="二、切换目录路径"></a>二、切换目录路径</h2><p>命令：cd<br>作用：切换命令<br>语法格式：cd 目录路径<br>案例：<br>    cd &#x2F;etc&#x2F;rc.d&#x2F;init.d&#x2F;<br>特殊用法：<br>    cd .. : 返回上一层<br>    cd - : 返回上一次所在目录<br>    cd 或者 cd ~ ：回家</p>
+<h2 id="三、Linux文件类型（Linux系统内一切皆是文件）"><a href="#三、Linux文件类型（Linux系统内一切皆是文件）" class="headerlink" title="三、Linux文件类型（Linux系统内一切皆是文件）"></a>三、Linux文件类型（Linux系统内一切皆是文件）</h2><p>普通文件：-<br>目录文件：d<br>链接文件：l<br>块设备文件：b<br>字符设备文件：c<br>套接字文件：s<br>管道文件：p</p>
+<h2 id="四、文件和目录的基本操作（增删改查）"><a href="#四、文件和目录的基本操作（增删改查）" class="headerlink" title="四、文件和目录的基本操作（增删改查）"></a>四、文件和目录的基本操作（增删改查）</h2><h3 id="1、创建文件或者目录"><a href="#1、创建文件或者目录" class="headerlink" title="1、创建文件或者目录"></a>1、创建文件或者目录</h3><p>mkdir<br>作用：创建目录<br>语法格式：mkdir [选项] 目录名…<br>常用选项：<br>    -p：创建多级目录（自动创建目录中缺失的父目录）</p>
+<p>touch<br>作用：创建文件<br>语法格式：touch 文件名</p>
+<h3 id="2、rm"><a href="#2、rm" class="headerlink" title="2、rm"></a>2、rm</h3><p>作用：删除文件<br>语法格式：rm[选项]… 文件名…<br>常用选项：<br>    -r：删除目录<br>    -f：不询问，强制删除<br>注意事项：<br>    rm -rf * ：表示删除当前目录下的所有文件，使用时注意当前所在路径<br>    rm -rf &#x2F;* ：这是传说中删跟跑路，千万不要使用</p>
+<h3 id="3、更改文件或者目录"><a href="#3、更改文件或者目录" class="headerlink" title="3、更改文件或者目录"></a>3、更改文件或者目录</h3><p>cp<br>作用：拷贝文件<br>语法格式：cp[选项] 源文件地址 目标文件地址<br>常用选项：<br>    -r：拷贝目录</p>
+<p>mv<br>作用：移动文件和目录<br>语法格式：mv 源文件地址 目标文件地址</p>
+<h3 id="4、查看文件和目录内容"><a href="#4、查看文件和目录内容" class="headerlink" title="4、查看文件和目录内容"></a>4、查看文件和目录内容</h3><p>查看目录内容<br>ls<br>（略略）</p>
+<p>查看文件内容<br>cat		（只适用于查看内容较少的文件）<br>命令：输出文件所有内容<br>语法格式：cat [选项] 文件名<br>常用选项：<br>    -n：带行号显示文件内容</p>
+<p>head<br>作用：从文件开头查看<br>语法格式：head [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
+<p>tail<br>作用：从文件结尾查看<br>语法格式：tail [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
+<p>扩展内容<br>管道符 | ：将前一个命令的输出结果作为后面一个命令的操作对象</p>
+<h1 id="3-vim编辑器"><a href="#3-vim编辑器" class="headerlink" title="3)vim编辑器"></a>3)vim编辑器</h1><p>vi&#x2F;vim文本编辑器<br>vim是vi的全面升级版，vim需要后期手动下载（yum -y install vim）<br>以下 vi&#x2F;vim 简称 vim</p>
+<p>命令：vim<br>作用：文本编辑器<br>语法格式：vim [选项] 文件名</p>
+<h2 id="一、vim的三种工作模式"><a href="#一、vim的三种工作模式" class="headerlink" title="一、vim的三种工作模式"></a>一、vim的三种工作模式</h2><p>命令模式（默认模式）：通过快捷键指令可以进行复制粘贴拷贝等操作</p>
+<p>编辑模式：可以进行正常的文本内容书写</p>
+<p>末行模式：可以进行保存退出以及编辑环境的配置等操作<br>       特征：左下角有：字样，且后面有绿色光标</p>
+<p>三种模式的切换：<br>        按esc———&gt;	        &lt;———按esc键<br>编辑模式&lt;————————————&gt;命令模式&lt;————————————&gt;末行模式<br>         &lt;————按i				     打：——&gt;</p>
+<p>命令模式下的操作：<br>    gg：跳转到第一行行首<br>    ngg：跳转到第n行行首（n是数字）<br>    G：跳转到文章末行行首<br>    yy:复制光标当前所在行<br>    nyy：复制光标当前所在行往下数n行（n是数字）<br>    dd：剪切光标当前所在行（不粘贴可以当做删除来用）<br>    ndd：剪切光标当前所在行往下数n行（n是数字）<br>    p（P）：将内容粘贴至光标所在行的下（上）一行<br>    dG：将光标所在行到文章末行全部剪切（删除0）<br>    u：撤回<br>    Ctrl + r：撤回我的撤回</p>
+<p>编辑模式下的操作：<br>    正常操作</p>
+<p>末行模式下的操作：<br>    q ：直接退出<br>    q!：强制退出<br>    w：保存<br>    wq：保存退出<br>    wq!：强制退出<br>    set nu:带行号显示<br>    set nonu：取消行号显示</p>
+<h1 id="4-压缩与归档"><a href="#4-压缩与归档" class="headerlink" title="4)压缩与归档"></a>4)压缩与归档</h1><h2 id="一、了解压缩格式"><a href="#一、了解压缩格式" class="headerlink" title="一、了解压缩格式"></a>一、了解压缩格式</h2><p>Windows：zip、rar、7z<br>Linux：gzip（gz）、bzip2（bz2）、xz</p>
+<h2 id="二、压缩软件"><a href="#二、压缩软件" class="headerlink" title="二、压缩软件"></a>二、压缩软件</h2><p>命令：gzip<br>作业：压缩工具<br>语法格式：gzip [选项]… 文件名…<br>常用选项：<br>    -r：对目录操作（把目录下的所有文件单独操作）<br>    -d：解压</p>
+<h2 id="三、归档与解归档"><a href="#三、归档与解归档" class="headerlink" title="三、归档与解归档"></a>三、归档与解归档</h2><p>命令：tar<br>作用：打包和解包<br>语法格式：tar[选项]… 文件名…<br>常用选项：<br>    -c：打包<br>    -x：解包<br>    -t：看包<br>    -v：看操作过程<br>    -f：指定包的名称<br>    -a：自动压缩&#x2F;解压<br>    -C：将内容解压至指定的文件路径去</p>
+<h1 id="5-用户管理"><a href="#5-用户管理" class="headerlink" title="5)用户管理"></a>5)用户管理</h1><h2 id="一、用户和组的概念"><a href="#一、用户和组的概念" class="headerlink" title="一、用户和组的概念"></a>一、用户和组的概念</h2><p>Linux系统里面的用户：对操作系统实现不同功能身份的人<br>组：一个或多个用户的集合<br>对一个组进行授权，就相当于对这个组里面所有的人进行授权，提高了我们授权管理的效率</p>
+<h3 id="1、用户和组的关系"><a href="#1、用户和组的关系" class="headerlink" title="1、用户和组的关系"></a>1、用户和组的关系</h3><p>用户可以加入一个组，也可以加入多个组<br>组里面可以没有用户，也可以有多个用户<br>对用户来讲，组分为两种，一种叫做主要组，一种叫做附加组<br>主要组有且只能有一个，附加组可以没有，也可以有多个</p>
+<h2 id="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"><a href="#二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）" class="headerlink" title="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"></a>二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）</h2><p>超级管理员 就是uid为0的用户<br>    注意事项：只要uid为0，它就是超级管理员，拥有最大的特权<br>        gid为0，不意味着拥有特权<br>系统用户也是普通账户，没有特权，一般不可以登录系统，专用程序的运行<br>    uid范围：1-999<br>普通用户就是普通账户，没有特权，一般可以登录系统，专用于人的登录操作<br>    uid范围：1000-？</p>
+<h2 id="三、用户的查询"><a href="#三、用户的查询" class="headerlink" title="三、用户的查询"></a>三、用户的查询</h2><p>命令：id<br>语法格式：id 用户名</p>
+<h2 id="四、了解-etc-passwd文件"><a href="#四、了解-etc-passwd文件" class="headerlink" title="四、了解&#x2F;etc&#x2F;passwd文件"></a>四、了解&#x2F;etc&#x2F;passwd文件</h2><p>passwd文件保存着系统上所有用户的信息<br>用户名称代指密码:uid:gid:描述信息:家目录:登录环境</p>
+<h2 id="五、了解-etc-shadow文件"><a href="#五、了解-etc-shadow文件" class="headerlink" title="五、了解&#x2F;etc&#x2F;shadow文件"></a>五、了解&#x2F;etc&#x2F;shadow文件</h2><p>这个文件保存着所以用户的加密密码</p>
+<h2 id="六、了解-etc-skel-目录"><a href="#六、了解-etc-skel-目录" class="headerlink" title="六、了解&#x2F;etc&#x2F;skel&#x2F;目录"></a>六、了解&#x2F;etc&#x2F;skel&#x2F;目录</h2><p>用户的家目录模板</p>
+<h2 id="七、创建用户"><a href="#七、创建用户" class="headerlink" title="七、创建用户"></a>七、创建用户</h2><p>命令：useradd<br>语法格式：useradd [选项]… 用户名<br>注意事项：创建用户时，如果没有指定用户的主要组，那么系统就会创建一个与该用户同名的组，<br>并将这个组作为这个用户的主要组<br>常用选项：<br>    -s：设置用户的登录环境<br>    -M：不给用户设置家目录<br>    如何创建一个给程序使用的账户（不给登录系统）<br>    答：useradd -M -s &#x2F;sbin&#x2F;nologin ikun</p>
+<h2 id="八、配置用户密码"><a href="#八、配置用户密码" class="headerlink" title="八、配置用户密码"></a>八、配置用户密码</h2><p>命令：passwd<br>语法格式：passwd [用户名]</p>
+<p>一、了解权限<br>权限就是权利的限制，主要是针对于普通用户</p>
+<p>二、查看权限<br>我们可以使用ls-l的命令来进行文件属性的查看，其中就有我们的文件权限</p>
+<h1 id="6-权限管理"><a href="#6-权限管理" class="headerlink" title="6)权限管理"></a>6)权限管理</h1><p>总用量 4<br>-rw——-. 1 root root 1241 11月 12 15:36 anaconda-ks.cfg</p>
+<p>其中开头-rw——- 这一段里面，最前面的 - 表示文件类型标识符（这是一个普通文件），<br>后面的这一段共九位 rw——- 就是我们文件的权限标识符</p>
+<p>三、unix基础权限（也叫做ugo基础权限）<br> 对文件来讲，可以把用户分为三个大类<br>    u: 文件的所有者<br>        文件的所有者一般是文件的创建者<br>    g: 文件的所属组成员<br>        文件的所属组一般是文件创建者的主要组<br>        注意事项：对组授权一般就是对整个组的用户进行授权<br>    o: 其他人<br>        既不是文件所有者，也不是文件所属组成员的用户，我们统称为其他人</p>
+<pre><code>    名称		对目录型文件	对非目录型文件
+r	可读权限		查看目录内容	查看文件内容
+w	可写		更改目录文件内容	更改文件内容
+x	可执行		进入目录		执行文件
+            （目录没有x权限，即使有rw权限也使用不了）
+
+文件的权限位有九位，unix权限对应的身份有三种，所以每个身份有三个权限位表示获得
+的权限
+以下图权限为例
+    rw-------			
+详解：       rw-			---			---
+    第一个三位是所有者的权限	第二个三位是所属组的权限	第三个三位表示的是其他人的权限
+</code></pre>
 ]]></content>
   </entry>
   <entry>
