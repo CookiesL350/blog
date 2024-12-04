@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MQTT</title>
+    <url>/2024/11/30/MQTT/</url>
+    <content><![CDATA[<p> 测试用</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Linux操作基础</title>
     <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
@@ -68,12 +74,9 @@ x	可执行		进入目录		执行文件
     第一个三位是所有者的权限	第二个三位是所属组的权限	第三个三位表示的是其他人的权限
 </code></pre>
 ]]></content>
-  </entry>
-  <entry>
-    <title>MQTT</title>
-    <url>/2024/11/30/MQTT/</url>
-    <content><![CDATA[<p> 测试用</p>
-]]></content>
+      <tags>
+        <tag>Linux基础</tag>
+      </tags>
   </entry>
   <entry>
     <title>基于Linux的Nginx搭建与管理</title>
@@ -171,7 +174,7 @@ x	可执行		进入目录		执行文件
 
 ]]></content>
       <tags>
-        <tag>123</tag>
+        <tag>Linux基础</tag>
       </tags>
   </entry>
   <entry>
@@ -358,5 +361,8 @@ x	可执行		进入目录		执行文件
 <p>可以看到我们的qq农场，那到底能不能显示出来呢？我们试一试</p>
 <p><img src="https://img-blog.csdnimg.cn/20200419123754413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdHRsZV9iYWl4Yg==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 ]]></content>
+      <tags>
+        <tag>Linux基础</tag>
+      </tags>
   </entry>
 </search>
