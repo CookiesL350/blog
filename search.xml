@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MQTT</title>
+    <url>/2024/11/30/MQTT/</url>
+    <content><![CDATA[<p> 测试用</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Linux操作基础</title>
     <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
+    <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
 <p>[cxk@localhost root]$</p>
 <h2 id="二、Linux帮助信息的查询"><a href="#二、Linux帮助信息的查询" class="headerlink" title="二、Linux帮助信息的查询"></a>二、Linux帮助信息的查询</h2><h3 id="1、Linux命令的种类"><a href="#1、Linux命令的种类" class="headerlink" title="1、Linux命令的种类"></a>1、Linux命令的种类</h3><p>内嵌命令：Linux内核自带的命令</p>
 <p>外部命令：后期安装才能使用的命令</p>
@@ -73,15 +79,9 @@ x	可执行		进入目录		执行文件
       </tags>
   </entry>
   <entry>
-    <title>MQTT</title>
-    <url>/2024/11/30/MQTT/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><p> 测试用</p>
-]]></content>
-  </entry>
-  <entry>
     <title>基于Linux的Nginx搭建与管理</title>
     <url>/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
+    <content><![CDATA[<h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
 <p><img src="https://s3.qjqq.cn/71/674e800566887.webp!color"></p>
 <p>官方测试nginx能够支撑5万并发，并且cpu，内存等资源消耗却非常低，运行非常稳定。最重要的是开源，免费，可商用的。</p>
 <p>Nginx还支持热部署，几乎可以做到7 * 24 小时不间断运行，即时运行数个月也不需要重启，还能够在不间断服务的情况下对软件进行升级维护。</p>
@@ -180,7 +180,7 @@ x	可执行		进入目录		执行文件
   <entry>
     <title>QQ农场搭建方案</title>
     <url>/2024/11/30/QQ%E5%86%9C%E5%9C%BA%E6%90%AD%E5%BB%BA%E6%96%B9%E6%A1%88/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="搭建高可用负载均衡架构—QQ农场项目"><a href="#搭建高可用负载均衡架构—QQ农场项目" class="headerlink" title="搭建高可用负载均衡架构—QQ农场项目"></a>搭建高可用负载均衡架构—QQ农场项目</h1><h2 id="1、事前准备"><a href="#1、事前准备" class="headerlink" title="1、事前准备"></a>1、事前准备</h2><p>负载均衡调度器+keepalived</p>
+    <content><![CDATA[<h1 id="搭建高可用负载均衡架构—QQ农场项目"><a href="#搭建高可用负载均衡架构—QQ农场项目" class="headerlink" title="搭建高可用负载均衡架构—QQ农场项目"></a>搭建高可用负载均衡架构—QQ农场项目</h1><h2 id="1、事前准备"><a href="#1、事前准备" class="headerlink" title="1、事前准备"></a>1、事前准备</h2><p>负载均衡调度器+keepalived</p>
 <p>keepalived-01：192.168.10.11</p>
 <p>keepalived-02：192.168.10.12</p>
 <p>nginx+php</p>
