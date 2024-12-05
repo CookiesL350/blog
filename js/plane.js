@@ -1,9 +1,6 @@
 /*
     Copyright (c) <2011, 2012> Rootof Creations HB, rootof.com, kickassapp.com
 */
-if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-    // 移动端不显示
-} else{
 (function (window) {
     var JSONP = (function () {
         var counter = 0, head, query, key, window = this;
@@ -2201,4 +2198,3 @@ if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobi
         }
     }
 })(typeof exports != 'undefined' ? exports : window);
-}
