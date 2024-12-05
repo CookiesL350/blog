@@ -1,6 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MQTT</title>
+    <url>/2024/12/04/MQTT/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>​		MQTT（Message Queuing Telemetry Transport）是一种轻量级的物联网通信协议，基于发布&#x2F;订阅模式，支持QoS级别，适用于低带宽、高延迟的网络环境。它具有精简的协议设计，开放的消息协议，以及广泛应用于物联网、M2M通信、消息推送和智能设备等领域。MQTT协议涉及发布者、订阅者和消息代理（Broker）的角色，以及连接、订阅、发布消息的过程，并包含会话保持和心跳机制，确保消息的可靠传输。</p>
+<p>MQTT官方文档：<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
+<h1 id="1-MQTT协议概念"><a href="#1-MQTT协议概念" class="headerlink" title="1 MQTT协议概念:"></a>1 MQTT协议概念:</h1><h3 id="1-1-MQTT特点"><a href="#1-1-MQTT特点" class="headerlink" title="1.1 MQTT特点:"></a>1.1 MQTT特点:</h3><ul>
+<li><strong>轻量级</strong>：物联网设备通常在处理能力、内存和能耗方面受到限制。MQTT 开销低、报文小的特点使其非常适合这些设备，因为它消耗更少的资源，即使在有限的能力下也能实现高效的通信。</li>
+<li><strong>可靠</strong>：物联网网络常常面临高延迟或连接不稳定的情况。MQTT 支持多种 QoS 等级、会话感知和持久连接，即使在困难的条件下也能保证消息的可靠传递，使其非常适合物联网应用。</li>
+<li><strong>安全通信</strong>：安全对于物联网网络至关重要，因为其经常涉及敏感数据的传输。为确保数据在传输过程中的机密性，MQTT 提供传输层安全（TLS）和安全套接层（SSL）加密功能。此外，MQTT 还通过用户名&#x2F;密码凭证或客户端证书提供身份验证和授权机制，以保护网络及其资源的访问。</li>
+<li><strong>双向通信</strong>：MQTT 的发布-订阅模式为设备之间提供了无缝的双向通信方式。客户端既可以向主题发布消息，也可以订阅接收特定主题上的消息，从而实现了物联网生态系统中的高效数据交换，而无需直接将设备耦合在一起。这种模式也简化了新设备的集成，同时保证了系统易于扩展。</li>
+<li><strong>连续、有状态的会话</strong>：MQTT 提供了客户端与 Broker 之间保持有状态会话的能力，这使得系统即使在断开连接后也能记住订阅和未传递的消息。此外，客户端还可以在建立连接时指定一个保活间隔，这会促使 Broker 定期检查连接状态。如果连接中断，Broker 会储存未传递的消息（根据 QoS 级别确定），并在客户端重新连接时尝试传递它们。这个特性保证了通信的可靠性，降低了因间断性连接而导致数据丢失的风险。</li>
+<li><strong>大规模物联网设备支持</strong>：物联网系统往往涉及大量设备，需要一种能够处理大规模部署的协议。MQTT 的轻量级特性、低带宽消耗和对资源的高效利用使其成为大规模物联网应用的理想选择。通过采用发布-订阅模式，MQTT 实现了发送者和接收者的解耦，从而有效地减少了网络流量和资源使用。此外，协议对不同 QoS 等级的支持使得消息传递可以根据需求进行定制，确保在各种场景下获得最佳的性能表现。</li>
+</ul>
+<h1 id="2-MQTT-的工作原理："><a href="#2-MQTT-的工作原理：" class="headerlink" title="2 MQTT 的工作原理："></a>2 MQTT 的工作原理：</h1><h2 id="2-1-MQTT基本组件"><a href="#2-1-MQTT基本组件" class="headerlink" title="2.1 MQTT基本组件"></a>2.1 MQTT基本组件</h2><p>要了解 MQTT 的工作原理，首先需要掌握以下几个概念：MQTT 客户端、MQTT Broker、发布-订阅模式、主题、QoS。</p>
+<p><strong>MQTT 客户端</strong></p>
+<p>任何运行 MQTT 客户端库的应用或设备都是 MQTT 客户端。例如，使用 MQTT 的即时通讯应用是客户端，使用 MQTT 上报数据的各种传感器是客户端，各种 MQTT 测试工具也是客户端。客户端可以：</p>
+<ol>
+<li>发布其他客户端可能会订阅的信息</li>
+<li>订阅其他客户端发布的消息</li>
+<li>退定或删除应用程序的消息</li>
+<li>断开与服务器的连接</li>
+</ol>
+<p><strong>MQTT 服务端</strong></p>
+<p>MQTT Broker 是负责处理客户端请求的关键组件，同时还负责消息的转发。一个高效强大的 MQTT Broker 能够轻松应对海量连接和百万级消息吞吐量，从而帮助物联网服务提供商专注于业务发展，快速构建可靠的 MQTT 应用。 服务端可以：</p>
+<ol>
+<li>接受来自客户的网络连接</li>
+<li>接受客户发布的应用信息</li>
+<li>处理来自客户端的订阅和退订请求</li>
+<li>向订阅的客户转发应用程序消息</li>
+</ol>
+<p><strong>发布-订阅模式</strong></p>
+<p>发布-订阅模式与客户端-服务器模式的不同之处在于，它将发送消息的客户端（发布者）和接收消息的客户端（订阅者）进行了解耦。发布者和订阅者之间无需建立直接连接，而是通过 MQTT Broker 来负责消息的路由和分发。</p>
+<p>下图展示了 MQTT 发布&#x2F;订阅过程。温度传感器作为客户端连接到 MQTT Broker，并通过发布操作将温度数据发布到一个特定主题（例如 <code>Temperature</code>）。MQTT Broker 接收到该消息后会负责将其转发给订阅了相应主题（<code>Temperature</code>）的订阅者客户端。</p>
+<p><strong>主题</strong></p>
+<p>MQTT 协议根据主题来转发消息。主题通过 <code>/</code> 来区分层级，类似于 URL 路径，例如：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chat<span class="regexp">/room/</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/10/</span>temperature</span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/+/</span>temperature</span><br></pre></td></tr></table></figure>
+
+<p>MQTT 主题支持以下两种通配符：<code>+</code> 和 <code>#</code>。</p>
+<ul>
+<li><code>+</code>：表示单层通配符，例如 <code>a/+</code> 匹配 <code>a/x</code> 或 <code>a/y</code>。</li>
+<li><code>#</code>：表示多层通配符，例如 <code>a/#</code> 匹配 <code>a/x</code>、<code>a/b/c/d</code>。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：通配符主题只能用于订阅，不能用于发布。</p>
+</blockquote>
+<p><strong>QoS</strong></p>
+<p>MQTT 提供了三种服务质量（QoS），在不同网络环境下保证消息的可靠性。</p>
+<ul>
+<li>QoS 0：消息最多传送一次。如果当前客户端不可用，它将丢失这条消息。</li>
+<li>QoS 1：消息至少传送一次。</li>
+<li>QoS 2：消息只传送一次。</li>
+</ul>
+<h2 id="2-2-MQTT-的工作流程"><a href="#2-2-MQTT-的工作流程" class="headerlink" title="2.2 MQTT 的工作流程"></a>2.2 MQTT 的工作流程</h2><p>​		实现MQTT协议需要客户端和服务器端通讯完成， 在通讯过程中, MQTT协议中有三种身份: 发布者(Publish)、代理(Broker)(服务器)、订阅者(Subscribe)。 其中，消息的发布者和订阅者都是客户端，消息代理是服务器，消息发布者可以同时是订阅者。</p>
+<ol>
+<li><strong>客户端使用 TCP&#x2F;IP 协议与 Broker 建立连接</strong>，可以选择使用 TLS&#x2F;SSL 加密来实现安全通信。客户端提供认证信息，并指定会话类型（Clean Session 或 Persistent Session）。</li>
+<li><strong>客户端既可以向特定主题发布消息，也可以订阅主题以接收消息</strong>。当客户端发布消息时，它会将消息发送给 MQTT Broker；而当客户端订阅消息时，它会接收与订阅主题相关的消息。</li>
+<li><strong>MQTT Broker 接收发布的消息</strong>，并将这些消息转发给订阅了对应主题的客户端。它根据 QoS 等级确保消息可靠传递，并根据会话类型为断开连接的客户端存储消息</li>
+</ol>
+<h2 id="2-3-MQTT协议设计规范"><a href="#2-3-MQTT协议设计规范" class="headerlink" title="2.3  MQTT协议设计规范"></a>2.3  MQTT协议设计规范</h2><ol>
+<li><strong>精简</strong>，不添加可有可无的功能；</li>
+<li><strong>发布&#x2F;订阅(Pub&#x2F;Sub)模式</strong>，方便消息在传感器之间传递，解耦Client&#x2F;Server模式，带来的好处在于不必预先知道对方的存在(ip&#x2F;port), 不必同时运行</li>
+<li>允许用户<strong>动态创建主题</strong>(不需要预先创建主题)，零运维成本；</li>
+<li>把传输量降到<strong>最低</strong>以提高传输效率</li>
+<li>把<strong>低带宽、高延迟、不稳定</strong>的网络等因素考虑在内；</li>
+<li>支持连续的会话保持和控制(<strong>心跳协议</strong>)</li>
+<li>客户端<strong>计算能力</strong>要求不高</li>
+<li>提供服务质量( quality of service level: <strong>QoS</strong>)管理:</li>
+<li>不强求传输数据的类型与格式，<strong>保持灵活性</strong>(指的使应用层业务数据)</li>
+</ol>
+<h3 id="2-4-MQTT协议主要特性"><a href="#2-4-MQTT协议主要特性" class="headerlink" title="2.4 MQTT协议主要特性"></a>2.4 MQTT协议主要特性</h3><ol>
+<li>开放消息协议，简单易实现。</li>
+<li>使用发布&#x2F;订阅消息模式，提供一对多的消息发布，解除应用程序耦合。</li>
+<li>对负载（协议携带的应用数据）内容屏蔽的消息传输。</li>
+<li>基于TCP&#x2F;IP网络连接,提供有序，无损，双向连接。主流的MQTT是基于TCP连接进行数据推送的，但是同样有基于UDP的版本，叫做MQTT-SN。这两种版本由于基于不同的连接方式，优缺点自然也就各有不同了。由于基于不同的连接方式，优缺点自然也就各有不同了。</li>
+<li>消息服务质量(QoS）支持，可靠传输保证;有三种消息发布服务质量:<br>QoSO:“至多一次”，消息发布完全依赖底层TCP&#x2F;IP网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。这一种方式主要普通APP的推送，倘若你的智能设备在消息推送时未联网，推送过去没收到，再次联网也就收不到了。QoS1:“至少—次”，确保消息到达，但消息重复可能会发生。QoS2:“只有一次”，确保消息到达一次。在一些要求比较严格的计费系统中，可以使用此级别。在计费系统中，消息重复或丢失会导致不正确的结果。这种最高质量的消息发布服务还可以用于即时通讯类的APP的推送，确保用户收到且只会收到一次。</li>
+<li>1字节固定报头，2字节心跳报文，最小化传输开销和协议交换，有效减少网络流量。<br>这就是为什么在介绍里说它非常适合”在物联网领域，传感器与服务器的通信，信息的收集，要知道嵌入式设备的运算能力和带宽都相对薄弱，使用这种协议来传递消息再适合不过了。</li>
+<li>在线状态感知:使用Last Will和Testament特性通知有关各方客户端异常中断的机制。<br>Last Will:即遗言机制，用于通知同一主题下的其他设备，发送遗言的设备已经断开了连接。<br>Testament:遗嘱机制，功能类似于Last Will。</li>
+</ol>
+<h3 id="2-5-MQTT协议中的方法"><a href="#2-5-MQTT协议中的方法" class="headerlink" title="2.5 MQTT协议中的方法"></a>2.5 MQTT协议中的方法</h3><p>MQTT协议中定义了一些方法(也被称为动作)，来于表示对确定资源所进行操作。这个资源可以代表预先存在的数据或动态生成数据，这取决于服务器的实现。通常来说，资源指服务器上的文件或输出。主要方法有:</p>
+<ol>
+<li>CONNECT: 客户端连接到服务器</li>
+<li>CONNACK: 连接确认</li>
+<li>PUBLISH: 发布消息</li>
+<li>PUBACK: 发布消息确认</li>
+<li>PUBREC: 发布的消息已接收</li>
+<li>PUBREL: 发布的消息已释放</li>
+<li>PUBCOMP: 发布完成</li>
+<li>SUBSCRIBE: 订阅请求</li>
+<li>SUBACK: 订阅确认</li>
+<li>UNSUBSCRIBE: 取消订阅</li>
+<li>UNSUBACK: 取消订阅确认</li>
+<li>PINGREQ: 客户端发送心跳</li>
+<li>PINGRESP: 服务端心跳响应</li>
+<li>DISCONNECT: 断开连接</li>
+<li>AUTH: 认证</li>
+</ol>
+<h2 id="3-MQTT协议数据包结构"><a href="#3-MQTT协议数据包结构" class="headerlink" title="3 MQTT协议数据包结构"></a>3 MQTT协议数据包结构</h2><p>​		在MQTT协议中，一个MQTT数据包由: 固定头(Fixed header)、可变头(Variable header)、消息体(payload)三部分构成。</p>
+<ol>
+<li>固定头(Fixed header)。存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识，如连接，发布，订阅，心跳等。其中固定头是必须的，所有类型的MQTT协议中，都必须包含固定头。</li>
+<li>可变头(Variable header)。存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容。可变头部不是可选的意思，而是指这部分在有些协议类型中存在，在有些协议中不存在。</li>
+<li>消息体（Payload)。存在于部分MQTT数据包中，表示客户端收到的具体内容。与可变头一样,在有些协议类型中有消息内容，有些协议类型中没有消息内容。</li>
+</ol>
+<h3 id="3-1-固定头-Fixed-Header"><a href="#3-1-固定头-Fixed-Header" class="headerlink" title="3.1 固定头(Fixed Header)"></a>3.1 固定头(Fixed Header)</h3><pre><code>    固定头存在于所有MQTT数据包中
+</code></pre>
+<p>固定头包含<strong>两部分</strong>内容：<br>        <strong>首字节(字节1)、</strong><br>        剩余消息报文长度(从第二个字节开始，长度为1-4字节)<br>        剩余长度是当前包中剩余内容长度的字节数，包括变量头和有效负载中的数据)。剩余长度不包含用来编码剩		余长度的字节。<br>        剩余长度使用了一种可变长度的结构来编码，这种结构使用单一字节表示0-127的值。大于127的值如下处理。每个字节的低7位用来编码数据，最高位用来表示是否还有后续字节。因此每个字节可以编码128个值，再加上一个标识位。剩余长度最多可以用四个字节来表示。<br>数据包类型</p>
+<p>​		<strong>位置</strong>: 第一个字节(Byte 1)中的7-4个bit被(Bit[7-4]),标识4位无符号值</p>
+<p>​		<strong>标志位</strong>：位置: 第一个字节中的0-3个bit位(Bit[3-0])。意思是字节位Bit[3-0]用作报文的标识。<br>首字节的低4位(bit3-bit0)用来表示某些报文类型的控制字段，实际上只有少数报文类型有控制位</p>
+<h3 id="3-2-可变头-Variable-Header"><a href="#3-2-可变头-Variable-Header" class="headerlink" title="3.2  可变头(Variable Header)"></a>3.2  可变头(Variable Header)</h3><p>可变头的意思是可变化的消息头部。有些报文类型包含可变头部有些报文则不包含。可变头部在固定头部和消息内容之间，其内容根据报文类型不同而不同</p>
+<h3 id="3-3-消息体-Payload"><a href="#3-3-消息体-Payload" class="headerlink" title="3.3  消息体(Payload)"></a>3.3  消息体(Payload)</h3><p>有些报文类型是包含Payload的,Payload的意思是消息载体的意思<br>如PUBLISH的Payload就是指消息内容(应用程序发布的消息内容)。而CONNECT的Payload则包含Client Identifier, Will Topic, Will Message, Username, Password等信息</p>
+<p>参考文献：</p>
+<p><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
+<p><a href="https://www.emqx.com/zh/blog/category/mqtt-programming">博客 - MQTT 编程 | EMQ</a></p>
+<p><a href="https://developer.aliyun.com/article/1261805">MQTT 协议入门：基础知识和快速教程-阿里云开发者社区</a></p>
+<p><a href="https://blog.csdn.net/jackwmj12/article/details/129163012">MQTT协议详解(完整版)-CSDN博客</a></p>
+]]></content>
+      <tags>
+        <tag>网络协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HA高可用服务搭建</title>
     <url>/2024/12/04/HA%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="HA高可用服务搭建"><a href="#HA高可用服务搭建" class="headerlink" title="HA高可用服务搭建"></a>HA高可用服务搭建</h2><h4 id="1、HA-Cluster高可用集群"><a href="#1、HA-Cluster高可用集群" class="headerlink" title="1、HA Cluster高可用集群"></a>1、HA Cluster高可用集群</h4><p>HA是High Available缩写。 HA Cluster是指高可用性集群，是保证业务连续性的有效解决方案，一般 有两个或两个以上的节点，且分为活动节点及备用节点。 </p>
@@ -102,6 +221,177 @@
 
 <p>第三步：重启keepalived软件</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart keepalived</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Linux基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux操作基础</title>
+    <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
+<p>[cxk@localhost root]$</p>
+<h2 id="二、Linux帮助信息的查询"><a href="#二、Linux帮助信息的查询" class="headerlink" title="二、Linux帮助信息的查询"></a>二、Linux帮助信息的查询</h2><h3 id="1、Linux命令的种类"><a href="#1、Linux命令的种类" class="headerlink" title="1、Linux命令的种类"></a>1、Linux命令的种类</h3><p>内嵌命令：Linux内核自带的命令</p>
+<p>外部命令：后期安装才能使用的命令</p>
+<h3 id="2、区分命令类型"><a href="#2、区分命令类型" class="headerlink" title="2、区分命令类型"></a>2、区分命令类型</h3><p>命令：type<br>作用：检测命令类型<br>语法格式：type被查询的命令	cd	ls</p>
+<h3 id="3、帮助信息的查询"><a href="#3、帮助信息的查询" class="headerlink" title="3、帮助信息的查询"></a>3、帮助信息的查询</h3><p>内嵌命令<br>    help被查询的命令<br>外部命令<br>    被查询的命令 –help</p>
+<h2 id="三、Linux命令的基础语法格式"><a href="#三、Linux命令的基础语法格式" class="headerlink" title="三、Linux命令的基础语法格式"></a>三、Linux命令的基础语法格式</h2><p>命令由三部分组成</p>
+<p>命令	选项	参数<br>动作	补充	操作对象</p>
+<p>案例：<br>命令：ls<br>作用:查看目录下的文件名（默认查看当前目录）<br>语法格式：ls [选项]… [文件]…</p>
+<p>[]：表示该项内容根据情况，可以写可以不写<br>…：表示该项内容根据情况，可以写一个或多个</p>
+<h1 id="2-文件管理"><a href="#2-文件管理" class="headerlink" title="2)文件管理"></a>2)文件管理</h1><h2 id="一、认识Linux目录树"><a href="#一、认识Linux目录树" class="headerlink" title="一、认识Linux目录树"></a>一、认识Linux目录树</h2><p>了解Linux系统和windows系统的目录结构区别<br>Linux是一个单目录树结构，可以理解为只有c盘的操作系统<br>命令：tree（需要手动下载：yum -y install tree）<br>作用：以树状图来列出目录的内容<br>&#x2F; （简称为 根目录）<br>├── bin -&gt; usr&#x2F;bin<br>├── boot<br>├── dev<br>├── etc——————存放配置文件的文件夹<br>├── home————普通用户的家目录<br>├── lib -&gt; usr&#x2F;lib<br>├── lib64 -&gt; usr&#x2F;lib64<br>├── media<br>├── mnt<br>├── opt<br>├── proc<br>├── root————超级管理员的家目录<br>├── run<br>├── sbin -&gt; usr&#x2F;sbin<br>├── srv<br>├── sys<br>├── tmp————存放临时（缓存）文件的目录<br>├── usr<br>└── var</p>
+<p>路径的种类<br>绝对路径：从&#x2F;  目录开始描述的文件或者目录的位置信息</p>
+<p>相对路径：从当前目录开始描述的文件或者目录的位置信息</p>
+<h2 id="二、切换目录路径"><a href="#二、切换目录路径" class="headerlink" title="二、切换目录路径"></a>二、切换目录路径</h2><p>命令：cd<br>作用：切换命令<br>语法格式：cd 目录路径<br>案例：<br>    cd &#x2F;etc&#x2F;rc.d&#x2F;init.d&#x2F;<br>特殊用法：<br>    cd .. : 返回上一层<br>    cd - : 返回上一次所在目录<br>    cd 或者 cd ~ ：回家</p>
+<h2 id="三、Linux文件类型（Linux系统内一切皆是文件）"><a href="#三、Linux文件类型（Linux系统内一切皆是文件）" class="headerlink" title="三、Linux文件类型（Linux系统内一切皆是文件）"></a>三、Linux文件类型（Linux系统内一切皆是文件）</h2><p>普通文件：-<br>目录文件：d<br>链接文件：l<br>块设备文件：b<br>字符设备文件：c<br>套接字文件：s<br>管道文件：p</p>
+<h2 id="四、文件和目录的基本操作（增删改查）"><a href="#四、文件和目录的基本操作（增删改查）" class="headerlink" title="四、文件和目录的基本操作（增删改查）"></a>四、文件和目录的基本操作（增删改查）</h2><h3 id="1、创建文件或者目录"><a href="#1、创建文件或者目录" class="headerlink" title="1、创建文件或者目录"></a>1、创建文件或者目录</h3><p>mkdir<br>作用：创建目录<br>语法格式：mkdir [选项] 目录名…<br>常用选项：<br>    -p：创建多级目录（自动创建目录中缺失的父目录）</p>
+<p>touch<br>作用：创建文件<br>语法格式：touch 文件名</p>
+<h3 id="2、rm"><a href="#2、rm" class="headerlink" title="2、rm"></a>2、rm</h3><p>作用：删除文件<br>语法格式：rm[选项]… 文件名…<br>常用选项：<br>    -r：删除目录<br>    -f：不询问，强制删除<br>注意事项：<br>    rm -rf * ：表示删除当前目录下的所有文件，使用时注意当前所在路径<br>    rm -rf &#x2F;* ：这是传说中删跟跑路，千万不要使用</p>
+<h3 id="3、更改文件或者目录"><a href="#3、更改文件或者目录" class="headerlink" title="3、更改文件或者目录"></a>3、更改文件或者目录</h3><p>cp<br>作用：拷贝文件<br>语法格式：cp[选项] 源文件地址 目标文件地址<br>常用选项：<br>    -r：拷贝目录</p>
+<p>mv<br>作用：移动文件和目录<br>语法格式：mv 源文件地址 目标文件地址</p>
+<h3 id="4、查看文件和目录内容"><a href="#4、查看文件和目录内容" class="headerlink" title="4、查看文件和目录内容"></a>4、查看文件和目录内容</h3><p>查看目录内容<br>ls<br>（略略）</p>
+<p>查看文件内容<br>cat		（只适用于查看内容较少的文件）<br>命令：输出文件所有内容<br>语法格式：cat [选项] 文件名<br>常用选项：<br>    -n：带行号显示文件内容</p>
+<p>head<br>作用：从文件开头查看<br>语法格式：head [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
+<p>tail<br>作用：从文件结尾查看<br>语法格式：tail [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
+<p>扩展内容<br>管道符 | ：将前一个命令的输出结果作为后面一个命令的操作对象</p>
+<h1 id="3-vim编辑器"><a href="#3-vim编辑器" class="headerlink" title="3)vim编辑器"></a>3)vim编辑器</h1><p>vi&#x2F;vim文本编辑器<br>vim是vi的全面升级版，vim需要后期手动下载（yum -y install vim）<br>以下 vi&#x2F;vim 简称 vim</p>
+<p>命令：vim<br>作用：文本编辑器<br>语法格式：vim [选项] 文件名</p>
+<h2 id="一、vim的三种工作模式"><a href="#一、vim的三种工作模式" class="headerlink" title="一、vim的三种工作模式"></a>一、vim的三种工作模式</h2><p>命令模式（默认模式）：通过快捷键指令可以进行复制粘贴拷贝等操作</p>
+<p>编辑模式：可以进行正常的文本内容书写</p>
+<p>末行模式：可以进行保存退出以及编辑环境的配置等操作<br>       特征：左下角有：字样，且后面有绿色光标</p>
+<p>三种模式的切换：<br>        按esc———&gt;	        &lt;———按esc键<br>编辑模式&lt;————————————&gt;命令模式&lt;————————————&gt;末行模式<br>         &lt;————按i				     打：——&gt;</p>
+<p>命令模式下的操作：<br>    gg：跳转到第一行行首<br>    ngg：跳转到第n行行首（n是数字）<br>    G：跳转到文章末行行首<br>    yy:复制光标当前所在行<br>    nyy：复制光标当前所在行往下数n行（n是数字）<br>    dd：剪切光标当前所在行（不粘贴可以当做删除来用）<br>    ndd：剪切光标当前所在行往下数n行（n是数字）<br>    p（P）：将内容粘贴至光标所在行的下（上）一行<br>    dG：将光标所在行到文章末行全部剪切（删除0）<br>    u：撤回<br>    Ctrl + r：撤回我的撤回</p>
+<p>编辑模式下的操作：<br>    正常操作</p>
+<p>末行模式下的操作：<br>    q ：直接退出<br>    q!：强制退出<br>    w：保存<br>    wq：保存退出<br>    wq!：强制退出<br>    set nu:带行号显示<br>    set nonu：取消行号显示</p>
+<h1 id="4-压缩与归档"><a href="#4-压缩与归档" class="headerlink" title="4)压缩与归档"></a>4)压缩与归档</h1><h2 id="一、了解压缩格式"><a href="#一、了解压缩格式" class="headerlink" title="一、了解压缩格式"></a>一、了解压缩格式</h2><p>Windows：zip、rar、7z<br>Linux：gzip（gz）、bzip2（bz2）、xz</p>
+<h2 id="二、压缩软件"><a href="#二、压缩软件" class="headerlink" title="二、压缩软件"></a>二、压缩软件</h2><p>命令：gzip<br>作业：压缩工具<br>语法格式：gzip [选项]… 文件名…<br>常用选项：<br>    -r：对目录操作（把目录下的所有文件单独操作）<br>    -d：解压</p>
+<h2 id="三、归档与解归档"><a href="#三、归档与解归档" class="headerlink" title="三、归档与解归档"></a>三、归档与解归档</h2><p>命令：tar<br>作用：打包和解包<br>语法格式：tar[选项]… 文件名…<br>常用选项：<br>    -c：打包<br>    -x：解包<br>    -t：看包<br>    -v：看操作过程<br>    -f：指定包的名称<br>    -a：自动压缩&#x2F;解压<br>    -C：将内容解压至指定的文件路径去</p>
+<h1 id="5-用户管理"><a href="#5-用户管理" class="headerlink" title="5)用户管理"></a>5)用户管理</h1><h2 id="一、用户和组的概念"><a href="#一、用户和组的概念" class="headerlink" title="一、用户和组的概念"></a>一、用户和组的概念</h2><p>Linux系统里面的用户：对操作系统实现不同功能身份的人<br>组：一个或多个用户的集合<br>对一个组进行授权，就相当于对这个组里面所有的人进行授权，提高了我们授权管理的效率</p>
+<h3 id="1、用户和组的关系"><a href="#1、用户和组的关系" class="headerlink" title="1、用户和组的关系"></a>1、用户和组的关系</h3><p>用户可以加入一个组，也可以加入多个组<br>组里面可以没有用户，也可以有多个用户<br>对用户来讲，组分为两种，一种叫做主要组，一种叫做附加组<br>主要组有且只能有一个，附加组可以没有，也可以有多个</p>
+<h2 id="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"><a href="#二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）" class="headerlink" title="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"></a>二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）</h2><p>超级管理员 就是uid为0的用户<br>    注意事项：只要uid为0，它就是超级管理员，拥有最大的特权<br>        gid为0，不意味着拥有特权<br>系统用户也是普通账户，没有特权，一般不可以登录系统，专用程序的运行<br>    uid范围：1-999<br>普通用户就是普通账户，没有特权，一般可以登录系统，专用于人的登录操作<br>    uid范围：1000-？</p>
+<h2 id="三、用户的查询"><a href="#三、用户的查询" class="headerlink" title="三、用户的查询"></a>三、用户的查询</h2><p>命令：id<br>语法格式：id 用户名</p>
+<h2 id="四、了解-etc-passwd文件"><a href="#四、了解-etc-passwd文件" class="headerlink" title="四、了解&#x2F;etc&#x2F;passwd文件"></a>四、了解&#x2F;etc&#x2F;passwd文件</h2><p>passwd文件保存着系统上所有用户的信息<br>用户名称代指密码:uid:gid:描述信息:家目录:登录环境</p>
+<h2 id="五、了解-etc-shadow文件"><a href="#五、了解-etc-shadow文件" class="headerlink" title="五、了解&#x2F;etc&#x2F;shadow文件"></a>五、了解&#x2F;etc&#x2F;shadow文件</h2><p>这个文件保存着所以用户的加密密码</p>
+<h2 id="六、了解-etc-skel-目录"><a href="#六、了解-etc-skel-目录" class="headerlink" title="六、了解&#x2F;etc&#x2F;skel&#x2F;目录"></a>六、了解&#x2F;etc&#x2F;skel&#x2F;目录</h2><p>用户的家目录模板</p>
+<h2 id="七、创建用户"><a href="#七、创建用户" class="headerlink" title="七、创建用户"></a>七、创建用户</h2><p>命令：useradd<br>语法格式：useradd [选项]… 用户名<br>注意事项：创建用户时，如果没有指定用户的主要组，那么系统就会创建一个与该用户同名的组，<br>并将这个组作为这个用户的主要组<br>常用选项：<br>    -s：设置用户的登录环境<br>    -M：不给用户设置家目录<br>    如何创建一个给程序使用的账户（不给登录系统）<br>    答：useradd -M -s &#x2F;sbin&#x2F;nologin ikun</p>
+<h2 id="八、配置用户密码"><a href="#八、配置用户密码" class="headerlink" title="八、配置用户密码"></a>八、配置用户密码</h2><p>命令：passwd<br>语法格式：passwd [用户名]</p>
+<p>一、了解权限<br>权限就是权利的限制，主要是针对于普通用户</p>
+<p>二、查看权限<br>我们可以使用ls-l的命令来进行文件属性的查看，其中就有我们的文件权限</p>
+<h1 id="6-权限管理"><a href="#6-权限管理" class="headerlink" title="6)权限管理"></a>6)权限管理</h1><p>总用量 4<br>-rw——-. 1 root root 1241 11月 12 15:36 anaconda-ks.cfg</p>
+<p>其中开头-rw——- 这一段里面，最前面的 - 表示文件类型标识符（这是一个普通文件），<br>后面的这一段共九位 rw——- 就是我们文件的权限标识符</p>
+<p>三、unix基础权限（也叫做ugo基础权限）<br> 对文件来讲，可以把用户分为三个大类<br>    u: 文件的所有者<br>        文件的所有者一般是文件的创建者<br>    g: 文件的所属组成员<br>        文件的所属组一般是文件创建者的主要组<br>        注意事项：对组授权一般就是对整个组的用户进行授权<br>    o: 其他人<br>        既不是文件所有者，也不是文件所属组成员的用户，我们统称为其他人</p>
+<pre><code>    名称		对目录型文件	对非目录型文件
+r	可读权限		查看目录内容	查看文件内容
+w	可写		更改目录文件内容	更改文件内容
+x	可执行		进入目录		执行文件
+            （目录没有x权限，即使有rw权限也使用不了）
+
+文件的权限位有九位，unix权限对应的身份有三种，所以每个身份有三个权限位表示获得
+的权限
+以下图权限为例
+    rw-------			
+详解：       rw-			---			---
+    第一个三位是所有者的权限	第二个三位是所属组的权限	第三个三位表示的是其他人的权限
+</code></pre>
+]]></content>
+      <tags>
+        <tag>Linux基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于Linux的Nginx搭建与管理</title>
+    <url>/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
+<p><img src="https://s3.qjqq.cn/71/674e800566887.webp!color"></p>
+<p>官方测试nginx能够支撑5万并发，并且cpu，内存等资源消耗却非常低，运行非常稳定。最重要的是开源，免费，可商用的。</p>
+<p>Nginx还支持热部署，几乎可以做到7 * 24 小时不间断运行，即时运行数个月也不需要重启，还能够在不间断服务的情况下对软件进行升级维护。</p>
+<h4 id="1-2-Nginx应用场景"><a href="#1-2-Nginx应用场景" class="headerlink" title="1.2 Nginx应用场景"></a>1.2 Nginx应用场景</h4><p>1、单机环境下参考服务器配置。 并发连接数在7000+ -8000左右。 集群模式20000+。</p>
+<p>2、<strong>作为 Web 服务器</strong>：相比 Apache，Nginx 使用更少的资源，支持更多的并发连接，体现更高的效率，这点使 Nginx尤其受到虚拟主机提供商的欢迎。能够支持高达 50,000 个并发连接数的响应。</p>
+<p>3、<strong>作为负载均衡服务器</strong>：Nginx 既可以在内部直接支持 Rails 和 PHP，也可以支持作为 HTTP代理服务器 对外进行服务。Nginx 用 C 编写, 不论是系统资源开销还是 CPU 使用效率都比 Perlbal 要好的多。</p>
+<p>4、<strong>作为邮件代理服务器</strong>：Nginx 同时也是一个非常优秀的邮件代理服务器（最早开发这个产品的目的之一也是作为邮件代理服务器），Last.fm 描述了成功并且美妙的使用经验。</p>
+<p>5、Nginx 安装非常的简单，配置文件 非常简洁（还能够支持perl语法），Bug非常少的服务器。</p>
+<h3 id="二、Nginx安装"><a href="#二、Nginx安装" class="headerlink" title="二、Nginx安装"></a>二、Nginx安装</h3><h4 id="2-1-进入官网下载"><a href="#2-1-进入官网下载" class="headerlink" title="2.1 进入官网下载"></a>2.1 <a href="http://nginx.org/">进入官网下载</a></h4><h4 id="2-2-安装相关依赖"><a href="#2-2-安装相关依赖" class="headerlink" title="2.2 安装相关依赖"></a>2.2 安装相关依赖</h4><h5 id="2-2-1-第一步"><a href="#2-2-1-第一步" class="headerlink" title="2.2.1 第一步"></a>2.2.1 第一步</h5><p>1、 避免：Nginx 与 httpd 发生端口冲突 </p>
+<p>卸载：可能已经安装的 httpd，从而避免发生&lt;端口冲突&gt;</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(rpm -qa | grep -P <span class="string">&quot;^httpd-([0-9].)+&quot;</span>) &amp;&amp; rpm -e --nodeps httpd || <span class="built_in">echo</span> <span class="string">&quot;未安装&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p>2、 下载：Nginx 源码安装包，并解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~ </span><br><span class="line"><span class="built_in">which</span> wget || yum install -y wget </span><br><span class="line">wget http://nginx.org/download/nginx-1.19.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>3、安装其他依赖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y gcc pcre-devel zlib-devel </span><br></pre></td></tr></table></figure>
+
+<p>4、创建运行账户nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">useradd -M -s /sbin/nologin nginx</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-安装nginx"><a href="#2-3-安装nginx" class="headerlink" title="2.3 安装nginx"></a>2.3 安装nginx</h4><ol>
+<li><p>解压nginx-xx.tar.gz包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -axf nginx-1.19.1.tar.gz </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入解压目录，执行.&#x2F;configure 设置安装路径和运行账户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/nginx-1.19.1 </span><br><span class="line">./configure --prefix=/usr/local/nginx --user=nginx --group=nginx </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>make&amp;&amp;make install</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置网页</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/usr/local/nginx/conf/nginx.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">worker_processes 1;</span></span><br><span class="line"><span class="string">events &#123;</span></span><br><span class="line"><span class="string">    worker_connections  1024;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">http &#123;</span></span><br><span class="line"><span class="string">     include            mime.types;</span></span><br><span class="line"><span class="string">     default_type       application/octet-stream;</span></span><br><span class="line"><span class="string">     sendfile           on;</span></span><br><span class="line"><span class="string">     keepalive_timeout  65;</span></span><br><span class="line"><span class="string">     charset            utf-8;</span></span><br><span class="line"><span class="string">     server &#123;</span></span><br><span class="line"><span class="string">        listen          80;</span></span><br><span class="line"><span class="string">        server_name     localhost;</span></span><br><span class="line"><span class="string">        include         conf.d/*.conf;</span></span><br><span class="line"><span class="string">        location / &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">            index       index.html index.htm;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        error_page 500 502 503 504  /50x.html;</span></span><br><span class="line"><span class="string">            location =  /50x.html &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">     &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建辅助配置文件目录</span></span><br><span class="line">[ -d /usr/local/nginx/conf/conf.d ] || <span class="built_in">mkdir</span> -p /usr/local/nginx/conf/conf.d</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="2-3-设置环境变量，同时设置开机自启"><a href="#2-3-设置环境变量，同时设置开机自启" class="headerlink" title="2.3 设置环境变量，同时设置开机自启"></a>2.3 设置环境变量，同时设置开机自启</h4><p>1、设置变量</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/profile.d/nginx.sh&lt;&lt;<span class="string">EOF </span></span><br><span class="line"><span class="string">export PATH=&quot;/usr/local/nginx/sbin:\$PATH&quot; </span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>2、刷新环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile </span><br></pre></td></tr></table></figure>
+
+<p>3、启停：Nginx 服务进程 </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/usr/local/nginx/sbin/nginx&quot;</span> &gt;&gt; /etc/rc.d/rc.local 	<span class="comment">## 设置：开机自启动 </span></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/rc.d/rc.local </span><br><span class="line">nginx 或 nginx -c /usr/local/nginx/conf/nginx.conf           <span class="comment">## 启动：Nginx 服务 </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-4-访问"><a href="#2-4-访问" class="headerlink" title="2.4 访问"></a>2.4 访问</h4><p>直接浏览器输入虚拟机ip地址测试</p>
+<h3 id="三、nginx常用命令和配置文件"><a href="#三、nginx常用命令和配置文件" class="headerlink" title="三、nginx常用命令和配置文件"></a>三、nginx常用命令和配置文件</h3><h4 id="3-1-常用命令"><a href="#3-1-常用命令" class="headerlink" title="3.1 常用命令"></a>3.1 常用命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#查看版本</span></span><br><span class="line">nginx -v</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查配置文件错误</span></span><br><span class="line">nginx -t</span><br><span class="line"></span><br><span class="line"><span class="comment">#启动nginx</span></span><br><span class="line">nginx</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭nginx</span></span><br><span class="line">nginx -s stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#重加载nginx</span></span><br><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-配置文件详细讲解"><a href="#3-2-配置文件详细讲解" class="headerlink" title="3.2 配置文件详细讲解"></a>3.2 配置文件详细讲解</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#配置文件位置</span></span><br><span class="line">位置：/usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">★ 查看：&lt;Nginx 主配置文件&gt;的&lt;默认配置&gt;</span><br><span class="line"><span class="comment"># cat /usr/local/nginx/conf/nginx.conf | grep -vE &quot;^\s*(#|$)&quot;</span></span><br><span class="line">worker_processes  1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">    	<span class="comment">## 导入：&lt;MIME 类型定义配置文件&gt;，其&lt;路径&gt;相对于[当前目录]</span></span><br><span class="line">		<span class="comment">## &lt;mime.type 配置文件&gt;定义：什么类型的&lt;文件&gt;，需用什么&lt;应用组件&gt;打开？</span></span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;	<span class="comment">## 设置语音编码为utf-8，使其页面支持中文</span></span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;		<span class="comment">## 设置：侦听端口和 IP 地址</span></span><br><span class="line">        server_name     localhost;</span><br><span class="line">        <span class="comment">## 导入：&lt;自定义配置文件&gt;（可以是相对路径 ☚ 以&lt;主配置文件&gt;的&lt;当前目录&gt;为&lt;根目录&gt;）</span></span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;	<span class="comment">## 定义：&lt;默认首页文件名&gt;</span></span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-3-理解：的及"><a href="#3-3-理解：的及" class="headerlink" title="3.3 理解：&lt;Nginx 主配置文件&gt;的&lt;语法格式&gt;及&lt;默认配置&gt;"></a>3.3 理解：&lt;Nginx 主配置文件&gt;的&lt;语法格式&gt;及&lt;默认配置&gt;</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">              ┍</span><br><span class="line">main 主配置段 ┤ worker_processes 1; <span class="comment">## 指定：&lt;nginx: worker process 工作进程&gt;的&lt;数量&gt;</span></span><br><span class="line">              │ <span class="comment">## 单 CPU，建议：1 个</span></span><br><span class="line">              │ <span class="comment">## 多 CPU，建议：CPU 总核心数</span></span><br><span class="line">              └</span><br><span class="line">                 ┍ events &#123;</span><br><span class="line">evens 事件配置段 ┤ worker_connections 1024; <span class="comment">## 设置：单个工作进程的&lt;并发最大连接&gt;</span></span><br><span class="line">                 └ &#125;</span><br><span class="line">               ┍ http &#123;</span><br><span class="line">               │ include mime.types;</span><br><span class="line">               │ default_type application/octet-stream;</span><br><span class="line">               │ sendfile on;</span><br><span class="line">               │ keepalive_timeout 65;</span><br><span class="line">               │ server &#123; ─────────────────────────────┐</span><br><span class="line">               │ listen 80;                            │</span><br><span class="line">http 网站配置段 ┤ server_name localhost;                 │</span><br><span class="line">               │ ┍ location / &#123;                        │</span><br><span class="line">               │ │ root html;                          │</span><br><span class="line">               │ │ index index.html index.htm;         ├定义：虚拟主机</span><br><span class="line">               │ └ &#125;                                   │</span><br><span class="line">               │ error_page 500 502 503 504 /50x.html; │</span><br><span class="line">               │ ┍ location = /50x.html &#123;              │</span><br><span class="line">               │ │ root html;                          │</span><br><span class="line">               │ └ &#125;                                   │</span><br><span class="line">               │ &#125;─────────────────────────────────────┘</span><br><span class="line">               └ &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、Nginx反向代理与负载均衡"><a href="#四、Nginx反向代理与负载均衡" class="headerlink" title="四、Nginx反向代理与负载均衡"></a>四、Nginx反向代理与负载均衡</h2><h4 id="4-1-反向代理"><a href="#4-1-反向代理" class="headerlink" title="4.1 反向代理"></a>4.1 反向代理</h4><p><strong>反向代理：</strong>正好相反。对于客户端来说，反向代理就好像目标服务器。并且客户端不需要进行任何设置。客户端向反向代理发送请求，接着反向代理判断请求走向何处，并将请求转交给客户端，使得这些内容就好像它自己的一样，一次客户端并会并会不感知到反向代理后面的服务，因此不需要客户端做任何设置，只需要把反向代理服务器当成真正的服务器就好了。</p>
+<h4 id="4-2-负载均衡"><a href="#4-2-负载均衡" class="headerlink" title="4.2 负载均衡"></a>4.2 负载均衡</h4><p>负载均衡建立在现有网络结构之上，它提供一种链家有效透明的方法扩展网络设备和服务器的宽带、增加吞吐量，加强网络数据处理能力，提高网络的灵活性和可用性。</p>
+<h4 id="Nginx-proxy反向代理模块-（默认安装）"><a href="#Nginx-proxy反向代理模块-（默认安装）" class="headerlink" title="Nginx proxy反向代理模块 （默认安装）"></a>Nginx proxy反向代理模块 （默认安装）</h4><p>功能 1：可以作为&lt;应用程序网关&gt;<br>    对外隐藏：&lt;内网服务器&gt;的&lt;IP地址&gt;<br>    对外发布：&lt;内网服务器&gt;的&lt;服务资源&gt;<br>功能 2：可以实现&lt;动静分离&gt;<br>    通过 location URI 地址匹配，实现：转发&lt;动态网页的请求&gt;。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">        location / &#123;		</span><br><span class="line">        proxy_pass http://服务器池;	 </span><br><span class="line">&#125;									<span class="comment">##&lt;上游服务器&gt;指 被反向代理的服务器</span></span><br><span class="line">     或 proxy_pass http://后端服务器池的名字；</span><br><span class="line">     </span><br><span class="line"><span class="comment">## 例如：</span></span><br><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">location / &#123;</span><br><span class="line">....</span><br><span class="line">        proxy_pass http://xm;	 </span><br><span class="line">&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h4 id="Nginx-upstream-上游模块（负载均衡）"><a href="#Nginx-upstream-上游模块（负载均衡）" class="headerlink" title="Nginx upstream 上游模块（负载均衡）"></a>Nginx upstream 上游模块（负载均衡）</h4><p>#指令 和 功能<br>upstream		 定义：一个命名的&lt;后端服务器池&gt;<br>server				定义：服务器池里的服务器<br>ip_hash			 启用：基于&lt;IP地址哈希值&gt;的&lt;负载均衡算法&gt;</p>
+<h4 id="负载均衡的部署方式"><a href="#负载均衡的部署方式" class="headerlink" title="负载均衡的部署方式"></a>负载均衡的部署方式</h4><p>1.轮询（默认）</p>
+<p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">    upstream xm &#123;	<span class="comment">##xm 服务器池的命名,不要有下划线</span></span><br><span class="line">		server ip地址:80;	<span class="comment">##上游服务器ip:端口</span></span><br><span class="line">		server ip地址:80;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 例如：</span></span><br><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;		<span class="comment">## 定义test组</span></span><br><span class="line">        server 192.168.106.147:80;	<span class="comment">## 定义test组里有那些机器</span></span><br><span class="line">        server 192.168.106.148:80;	<span class="comment">## 这几条ip换成自己web服务器的IP地址</span></span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;	<span class="comment">## 有请求就转发到test组</span></span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.weight (权重)<br>权重越大，被分配到的任务越多，被访问的概率越高</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">	upstream xm &#123;</span><br><span class="line">		server ip地址:80 weight=7;   <span class="comment">#默认weight=1</span></span><br><span class="line">		server ip地址:80 weight=3;</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#如上例，分别是70%和30%</span></span><br><span class="line"></span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment">## 例如：</span></span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;	<span class="comment">## 定义test组</span></span><br><span class="line">        server 192.168.106.147:80 weight=7; <span class="comment">## 定义test组内的机器</span></span><br><span class="line">        server 192.168.106.148:80 weight=3; <span class="comment">## 定义test组内的机器</span></span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;</span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>3.ip_hash(哈希算法)<br>客户第一次访问某个服务器后短时间断开，再次访问自动定位到该服务器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">	upstream xm &#123;</span><br><span class="line">		ip_hash;</span><br><span class="line">		server ip地址:80;</span><br><span class="line">		server ip地址:80;</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 例如：</span></span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;</span><br><span class="line">     	ip_hash;		<span class="comment">## 定义哈希算法</span></span><br><span class="line">        server 192.168.106.147:80;</span><br><span class="line">        server 192.168.106.148:80;</span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;</span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、Nginx-php动静分离"><a href="#五、Nginx-php动静分离" class="headerlink" title="五、Nginx+php动静分离"></a>五、Nginx+php动静分离</h2><p>为了加快网站的解析速度，可以把动态页面和静态页面由不同的服务器来解析，加快解析速度，降低原来单个服务器的压力。一般来说，都需要将动态资源和静态资源分开，由于Nginx的高并发和静态资源缓存等特性，经常将静态资源部署在Nginx上。如果请求的是静态资源，直接到静态资源目录获取资源，如果是童泰资源的请求，则利用反向代理的原理，把请求转发给对应后台应用去处理，从而实现动静分离。</p>
+<h5 id="1-动态和静态分离主要是通过nginx-PHP-FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。"><a href="#1-动态和静态分离主要是通过nginx-PHP-FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。" class="headerlink" title="1. 动态和静态分离主要是通过nginx + PHP FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。"></a>1. 动态和静态分离主要是通过nginx + PHP FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。</h5><h5 id="2-动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。"><a href="#2-动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。" class="headerlink" title="2. 动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。"></a>2. 动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。</h5><h5 id="3-简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html-nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理"><a href="#3-简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html-nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理" class="headerlink" title="3. 简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html, nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理"></a>3. 简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html, nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理</h5><h4 id="1、配合php实现动态页面和静态页面分开处理"><a href="#1、配合php实现动态页面和静态页面分开处理" class="headerlink" title="1、配合php实现动态页面和静态页面分开处理"></a>1、配合php实现动态页面和静态页面分开处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1、删除httpd</span><br><span class="line">rpm -e httpd --nodeps</span><br><span class="line">2、安装php及其组件</span><br><span class="line">yum install -y php php-devel php-mysql</span><br><span class="line">yum install -y php-fpm</span><br><span class="line">3、启动php及其组件，同时将其加入开机自启</span><br><span class="line">systemctl <span class="built_in">enable</span> php-fpm</span><br><span class="line">systemctl start php-fpm</span><br></pre></td></tr></table></figure>
+
+<p>2、修改运行用户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i -r <span class="string">&#x27;s/^\s*user\s*=.*/user = nginx/&#x27;</span> /etc/php-fpm.d/www.conf</span><br><span class="line">sed -i -r <span class="string">&#x27;s/^\s*group\s*=.*/group = nginx/&#x27;</span> /etc/php-fpm.d/www.conf</span><br></pre></td></tr></table></figure>
+
+<p>重启服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
+
+<p>3、修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/conf/conf.d/location_php.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">location ~ \.php$ &#123;</span></span><br><span class="line"><span class="string">            root           html;</span></span><br><span class="line"><span class="string">            fastcgi_index  index.php;</span></span><br><span class="line"><span class="string">            fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line"><span class="string">            include        fastcgi_params;</span></span><br><span class="line"><span class="string">            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;</span></span><br><span class="line"><span class="string">            if (!-f \$document_root\$fastcgi_script_name) &#123;</span></span><br><span class="line"><span class="string">                        return             404;</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<p>重载nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<p>4、编写php页面</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/html/index.php &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">            phpinfo();</span></span><br><span class="line"><span class="string">?&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <tags>
@@ -294,296 +584,6 @@
 ]]></content>
       <tags>
         <tag>Linux基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux操作基础</title>
-    <url>/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="1）Linux新手教程"><a href="#1）Linux新手教程" class="headerlink" title="1）Linux新手教程"></a>1）Linux新手教程</h1><h2 id="一、Linux状态提示符"><a href="#一、Linux状态提示符" class="headerlink" title="一、Linux状态提示符"></a>一、Linux状态提示符</h2><p>[root@localhost ~]#<br>解析： [         root            	  @        	      localhost   		      ~    	 	]        #<br>    当前登录名称	登录在	当前登录的主机名称		当前所在的目录名称	       身份标志符<br>                            ~表示在家目录	    #表示超级管理员<br>——————————————————————————————————————————————————<br>[root@localhost ~]#	<br>root用户登录在名为localhost的主机上面，目前位于家目录中，他的身份是超级管理员</p>
-<p>[cxk@localhost root]$</p>
-<h2 id="二、Linux帮助信息的查询"><a href="#二、Linux帮助信息的查询" class="headerlink" title="二、Linux帮助信息的查询"></a>二、Linux帮助信息的查询</h2><h3 id="1、Linux命令的种类"><a href="#1、Linux命令的种类" class="headerlink" title="1、Linux命令的种类"></a>1、Linux命令的种类</h3><p>内嵌命令：Linux内核自带的命令</p>
-<p>外部命令：后期安装才能使用的命令</p>
-<h3 id="2、区分命令类型"><a href="#2、区分命令类型" class="headerlink" title="2、区分命令类型"></a>2、区分命令类型</h3><p>命令：type<br>作用：检测命令类型<br>语法格式：type被查询的命令	cd	ls</p>
-<h3 id="3、帮助信息的查询"><a href="#3、帮助信息的查询" class="headerlink" title="3、帮助信息的查询"></a>3、帮助信息的查询</h3><p>内嵌命令<br>    help被查询的命令<br>外部命令<br>    被查询的命令 –help</p>
-<h2 id="三、Linux命令的基础语法格式"><a href="#三、Linux命令的基础语法格式" class="headerlink" title="三、Linux命令的基础语法格式"></a>三、Linux命令的基础语法格式</h2><p>命令由三部分组成</p>
-<p>命令	选项	参数<br>动作	补充	操作对象</p>
-<p>案例：<br>命令：ls<br>作用:查看目录下的文件名（默认查看当前目录）<br>语法格式：ls [选项]… [文件]…</p>
-<p>[]：表示该项内容根据情况，可以写可以不写<br>…：表示该项内容根据情况，可以写一个或多个</p>
-<h1 id="2-文件管理"><a href="#2-文件管理" class="headerlink" title="2)文件管理"></a>2)文件管理</h1><h2 id="一、认识Linux目录树"><a href="#一、认识Linux目录树" class="headerlink" title="一、认识Linux目录树"></a>一、认识Linux目录树</h2><p>了解Linux系统和windows系统的目录结构区别<br>Linux是一个单目录树结构，可以理解为只有c盘的操作系统<br>命令：tree（需要手动下载：yum -y install tree）<br>作用：以树状图来列出目录的内容<br>&#x2F; （简称为 根目录）<br>├── bin -&gt; usr&#x2F;bin<br>├── boot<br>├── dev<br>├── etc——————存放配置文件的文件夹<br>├── home————普通用户的家目录<br>├── lib -&gt; usr&#x2F;lib<br>├── lib64 -&gt; usr&#x2F;lib64<br>├── media<br>├── mnt<br>├── opt<br>├── proc<br>├── root————超级管理员的家目录<br>├── run<br>├── sbin -&gt; usr&#x2F;sbin<br>├── srv<br>├── sys<br>├── tmp————存放临时（缓存）文件的目录<br>├── usr<br>└── var</p>
-<p>路径的种类<br>绝对路径：从&#x2F;  目录开始描述的文件或者目录的位置信息</p>
-<p>相对路径：从当前目录开始描述的文件或者目录的位置信息</p>
-<h2 id="二、切换目录路径"><a href="#二、切换目录路径" class="headerlink" title="二、切换目录路径"></a>二、切换目录路径</h2><p>命令：cd<br>作用：切换命令<br>语法格式：cd 目录路径<br>案例：<br>    cd &#x2F;etc&#x2F;rc.d&#x2F;init.d&#x2F;<br>特殊用法：<br>    cd .. : 返回上一层<br>    cd - : 返回上一次所在目录<br>    cd 或者 cd ~ ：回家</p>
-<h2 id="三、Linux文件类型（Linux系统内一切皆是文件）"><a href="#三、Linux文件类型（Linux系统内一切皆是文件）" class="headerlink" title="三、Linux文件类型（Linux系统内一切皆是文件）"></a>三、Linux文件类型（Linux系统内一切皆是文件）</h2><p>普通文件：-<br>目录文件：d<br>链接文件：l<br>块设备文件：b<br>字符设备文件：c<br>套接字文件：s<br>管道文件：p</p>
-<h2 id="四、文件和目录的基本操作（增删改查）"><a href="#四、文件和目录的基本操作（增删改查）" class="headerlink" title="四、文件和目录的基本操作（增删改查）"></a>四、文件和目录的基本操作（增删改查）</h2><h3 id="1、创建文件或者目录"><a href="#1、创建文件或者目录" class="headerlink" title="1、创建文件或者目录"></a>1、创建文件或者目录</h3><p>mkdir<br>作用：创建目录<br>语法格式：mkdir [选项] 目录名…<br>常用选项：<br>    -p：创建多级目录（自动创建目录中缺失的父目录）</p>
-<p>touch<br>作用：创建文件<br>语法格式：touch 文件名</p>
-<h3 id="2、rm"><a href="#2、rm" class="headerlink" title="2、rm"></a>2、rm</h3><p>作用：删除文件<br>语法格式：rm[选项]… 文件名…<br>常用选项：<br>    -r：删除目录<br>    -f：不询问，强制删除<br>注意事项：<br>    rm -rf * ：表示删除当前目录下的所有文件，使用时注意当前所在路径<br>    rm -rf &#x2F;* ：这是传说中删跟跑路，千万不要使用</p>
-<h3 id="3、更改文件或者目录"><a href="#3、更改文件或者目录" class="headerlink" title="3、更改文件或者目录"></a>3、更改文件或者目录</h3><p>cp<br>作用：拷贝文件<br>语法格式：cp[选项] 源文件地址 目标文件地址<br>常用选项：<br>    -r：拷贝目录</p>
-<p>mv<br>作用：移动文件和目录<br>语法格式：mv 源文件地址 目标文件地址</p>
-<h3 id="4、查看文件和目录内容"><a href="#4、查看文件和目录内容" class="headerlink" title="4、查看文件和目录内容"></a>4、查看文件和目录内容</h3><p>查看目录内容<br>ls<br>（略略）</p>
-<p>查看文件内容<br>cat		（只适用于查看内容较少的文件）<br>命令：输出文件所有内容<br>语法格式：cat [选项] 文件名<br>常用选项：<br>    -n：带行号显示文件内容</p>
-<p>head<br>作用：从文件开头查看<br>语法格式：head [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
-<p>tail<br>作用：从文件结尾查看<br>语法格式：tail [选项] 文件名<br>常用选项：<br>    -n：查看n行（n是数字）</p>
-<p>扩展内容<br>管道符 | ：将前一个命令的输出结果作为后面一个命令的操作对象</p>
-<h1 id="3-vim编辑器"><a href="#3-vim编辑器" class="headerlink" title="3)vim编辑器"></a>3)vim编辑器</h1><p>vi&#x2F;vim文本编辑器<br>vim是vi的全面升级版，vim需要后期手动下载（yum -y install vim）<br>以下 vi&#x2F;vim 简称 vim</p>
-<p>命令：vim<br>作用：文本编辑器<br>语法格式：vim [选项] 文件名</p>
-<h2 id="一、vim的三种工作模式"><a href="#一、vim的三种工作模式" class="headerlink" title="一、vim的三种工作模式"></a>一、vim的三种工作模式</h2><p>命令模式（默认模式）：通过快捷键指令可以进行复制粘贴拷贝等操作</p>
-<p>编辑模式：可以进行正常的文本内容书写</p>
-<p>末行模式：可以进行保存退出以及编辑环境的配置等操作<br>       特征：左下角有：字样，且后面有绿色光标</p>
-<p>三种模式的切换：<br>        按esc———&gt;	        &lt;———按esc键<br>编辑模式&lt;————————————&gt;命令模式&lt;————————————&gt;末行模式<br>         &lt;————按i				     打：——&gt;</p>
-<p>命令模式下的操作：<br>    gg：跳转到第一行行首<br>    ngg：跳转到第n行行首（n是数字）<br>    G：跳转到文章末行行首<br>    yy:复制光标当前所在行<br>    nyy：复制光标当前所在行往下数n行（n是数字）<br>    dd：剪切光标当前所在行（不粘贴可以当做删除来用）<br>    ndd：剪切光标当前所在行往下数n行（n是数字）<br>    p（P）：将内容粘贴至光标所在行的下（上）一行<br>    dG：将光标所在行到文章末行全部剪切（删除0）<br>    u：撤回<br>    Ctrl + r：撤回我的撤回</p>
-<p>编辑模式下的操作：<br>    正常操作</p>
-<p>末行模式下的操作：<br>    q ：直接退出<br>    q!：强制退出<br>    w：保存<br>    wq：保存退出<br>    wq!：强制退出<br>    set nu:带行号显示<br>    set nonu：取消行号显示</p>
-<h1 id="4-压缩与归档"><a href="#4-压缩与归档" class="headerlink" title="4)压缩与归档"></a>4)压缩与归档</h1><h2 id="一、了解压缩格式"><a href="#一、了解压缩格式" class="headerlink" title="一、了解压缩格式"></a>一、了解压缩格式</h2><p>Windows：zip、rar、7z<br>Linux：gzip（gz）、bzip2（bz2）、xz</p>
-<h2 id="二、压缩软件"><a href="#二、压缩软件" class="headerlink" title="二、压缩软件"></a>二、压缩软件</h2><p>命令：gzip<br>作业：压缩工具<br>语法格式：gzip [选项]… 文件名…<br>常用选项：<br>    -r：对目录操作（把目录下的所有文件单独操作）<br>    -d：解压</p>
-<h2 id="三、归档与解归档"><a href="#三、归档与解归档" class="headerlink" title="三、归档与解归档"></a>三、归档与解归档</h2><p>命令：tar<br>作用：打包和解包<br>语法格式：tar[选项]… 文件名…<br>常用选项：<br>    -c：打包<br>    -x：解包<br>    -t：看包<br>    -v：看操作过程<br>    -f：指定包的名称<br>    -a：自动压缩&#x2F;解压<br>    -C：将内容解压至指定的文件路径去</p>
-<h1 id="5-用户管理"><a href="#5-用户管理" class="headerlink" title="5)用户管理"></a>5)用户管理</h1><h2 id="一、用户和组的概念"><a href="#一、用户和组的概念" class="headerlink" title="一、用户和组的概念"></a>一、用户和组的概念</h2><p>Linux系统里面的用户：对操作系统实现不同功能身份的人<br>组：一个或多个用户的集合<br>对一个组进行授权，就相当于对这个组里面所有的人进行授权，提高了我们授权管理的效率</p>
-<h3 id="1、用户和组的关系"><a href="#1、用户和组的关系" class="headerlink" title="1、用户和组的关系"></a>1、用户和组的关系</h3><p>用户可以加入一个组，也可以加入多个组<br>组里面可以没有用户，也可以有多个用户<br>对用户来讲，组分为两种，一种叫做主要组，一种叫做附加组<br>主要组有且只能有一个，附加组可以没有，也可以有多个</p>
-<h2 id="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"><a href="#二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）" class="headerlink" title="二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）"></a>二、用户的种类（系统根据uid和gid来判断用户和组的身份，而不是用户和组的名称）</h2><p>超级管理员 就是uid为0的用户<br>    注意事项：只要uid为0，它就是超级管理员，拥有最大的特权<br>        gid为0，不意味着拥有特权<br>系统用户也是普通账户，没有特权，一般不可以登录系统，专用程序的运行<br>    uid范围：1-999<br>普通用户就是普通账户，没有特权，一般可以登录系统，专用于人的登录操作<br>    uid范围：1000-？</p>
-<h2 id="三、用户的查询"><a href="#三、用户的查询" class="headerlink" title="三、用户的查询"></a>三、用户的查询</h2><p>命令：id<br>语法格式：id 用户名</p>
-<h2 id="四、了解-etc-passwd文件"><a href="#四、了解-etc-passwd文件" class="headerlink" title="四、了解&#x2F;etc&#x2F;passwd文件"></a>四、了解&#x2F;etc&#x2F;passwd文件</h2><p>passwd文件保存着系统上所有用户的信息<br>用户名称代指密码:uid:gid:描述信息:家目录:登录环境</p>
-<h2 id="五、了解-etc-shadow文件"><a href="#五、了解-etc-shadow文件" class="headerlink" title="五、了解&#x2F;etc&#x2F;shadow文件"></a>五、了解&#x2F;etc&#x2F;shadow文件</h2><p>这个文件保存着所以用户的加密密码</p>
-<h2 id="六、了解-etc-skel-目录"><a href="#六、了解-etc-skel-目录" class="headerlink" title="六、了解&#x2F;etc&#x2F;skel&#x2F;目录"></a>六、了解&#x2F;etc&#x2F;skel&#x2F;目录</h2><p>用户的家目录模板</p>
-<h2 id="七、创建用户"><a href="#七、创建用户" class="headerlink" title="七、创建用户"></a>七、创建用户</h2><p>命令：useradd<br>语法格式：useradd [选项]… 用户名<br>注意事项：创建用户时，如果没有指定用户的主要组，那么系统就会创建一个与该用户同名的组，<br>并将这个组作为这个用户的主要组<br>常用选项：<br>    -s：设置用户的登录环境<br>    -M：不给用户设置家目录<br>    如何创建一个给程序使用的账户（不给登录系统）<br>    答：useradd -M -s &#x2F;sbin&#x2F;nologin ikun</p>
-<h2 id="八、配置用户密码"><a href="#八、配置用户密码" class="headerlink" title="八、配置用户密码"></a>八、配置用户密码</h2><p>命令：passwd<br>语法格式：passwd [用户名]</p>
-<p>一、了解权限<br>权限就是权利的限制，主要是针对于普通用户</p>
-<p>二、查看权限<br>我们可以使用ls-l的命令来进行文件属性的查看，其中就有我们的文件权限</p>
-<h1 id="6-权限管理"><a href="#6-权限管理" class="headerlink" title="6)权限管理"></a>6)权限管理</h1><p>总用量 4<br>-rw——-. 1 root root 1241 11月 12 15:36 anaconda-ks.cfg</p>
-<p>其中开头-rw——- 这一段里面，最前面的 - 表示文件类型标识符（这是一个普通文件），<br>后面的这一段共九位 rw——- 就是我们文件的权限标识符</p>
-<p>三、unix基础权限（也叫做ugo基础权限）<br> 对文件来讲，可以把用户分为三个大类<br>    u: 文件的所有者<br>        文件的所有者一般是文件的创建者<br>    g: 文件的所属组成员<br>        文件的所属组一般是文件创建者的主要组<br>        注意事项：对组授权一般就是对整个组的用户进行授权<br>    o: 其他人<br>        既不是文件所有者，也不是文件所属组成员的用户，我们统称为其他人</p>
-<pre><code>    名称		对目录型文件	对非目录型文件
-r	可读权限		查看目录内容	查看文件内容
-w	可写		更改目录文件内容	更改文件内容
-x	可执行		进入目录		执行文件
-            （目录没有x权限，即使有rw权限也使用不了）
-
-文件的权限位有九位，unix权限对应的身份有三种，所以每个身份有三个权限位表示获得
-的权限
-以下图权限为例
-    rw-------			
-详解：       rw-			---			---
-    第一个三位是所有者的权限	第二个三位是所属组的权限	第三个三位表示的是其他人的权限
-</code></pre>
-]]></content>
-      <tags>
-        <tag>Linux基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于Linux的Nginx搭建与管理</title>
-    <url>/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
-<p><img src="https://s3.qjqq.cn/71/674e800566887.webp!color"></p>
-<p>官方测试nginx能够支撑5万并发，并且cpu，内存等资源消耗却非常低，运行非常稳定。最重要的是开源，免费，可商用的。</p>
-<p>Nginx还支持热部署，几乎可以做到7 * 24 小时不间断运行，即时运行数个月也不需要重启，还能够在不间断服务的情况下对软件进行升级维护。</p>
-<h4 id="1-2-Nginx应用场景"><a href="#1-2-Nginx应用场景" class="headerlink" title="1.2 Nginx应用场景"></a>1.2 Nginx应用场景</h4><p>1、单机环境下参考服务器配置。 并发连接数在7000+ -8000左右。 集群模式20000+。</p>
-<p>2、<strong>作为 Web 服务器</strong>：相比 Apache，Nginx 使用更少的资源，支持更多的并发连接，体现更高的效率，这点使 Nginx尤其受到虚拟主机提供商的欢迎。能够支持高达 50,000 个并发连接数的响应。</p>
-<p>3、<strong>作为负载均衡服务器</strong>：Nginx 既可以在内部直接支持 Rails 和 PHP，也可以支持作为 HTTP代理服务器 对外进行服务。Nginx 用 C 编写, 不论是系统资源开销还是 CPU 使用效率都比 Perlbal 要好的多。</p>
-<p>4、<strong>作为邮件代理服务器</strong>：Nginx 同时也是一个非常优秀的邮件代理服务器（最早开发这个产品的目的之一也是作为邮件代理服务器），Last.fm 描述了成功并且美妙的使用经验。</p>
-<p>5、Nginx 安装非常的简单，配置文件 非常简洁（还能够支持perl语法），Bug非常少的服务器。</p>
-<h3 id="二、Nginx安装"><a href="#二、Nginx安装" class="headerlink" title="二、Nginx安装"></a>二、Nginx安装</h3><h4 id="2-1-进入官网下载"><a href="#2-1-进入官网下载" class="headerlink" title="2.1 进入官网下载"></a>2.1 <a href="http://nginx.org/">进入官网下载</a></h4><h4 id="2-2-安装相关依赖"><a href="#2-2-安装相关依赖" class="headerlink" title="2.2 安装相关依赖"></a>2.2 安装相关依赖</h4><h5 id="2-2-1-第一步"><a href="#2-2-1-第一步" class="headerlink" title="2.2.1 第一步"></a>2.2.1 第一步</h5><p>1、 避免：Nginx 与 httpd 发生端口冲突 </p>
-<p>卸载：可能已经安装的 httpd，从而避免发生&lt;端口冲突&gt;</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(rpm -qa | grep -P <span class="string">&quot;^httpd-([0-9].)+&quot;</span>) &amp;&amp; rpm -e --nodeps httpd || <span class="built_in">echo</span> <span class="string">&quot;未安装&quot;</span> </span><br></pre></td></tr></table></figure>
-
-<p>2、 下载：Nginx 源码安装包，并解压</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~ </span><br><span class="line"><span class="built_in">which</span> wget || yum install -y wget </span><br><span class="line">wget http://nginx.org/download/nginx-1.19.1.tar.gz</span><br></pre></td></tr></table></figure>
-
-<p>3、安装其他依赖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y gcc pcre-devel zlib-devel </span><br></pre></td></tr></table></figure>
-
-<p>4、创建运行账户nginx</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">useradd -M -s /sbin/nologin nginx</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-3-安装nginx"><a href="#2-3-安装nginx" class="headerlink" title="2.3 安装nginx"></a>2.3 安装nginx</h4><ol>
-<li><p>解压nginx-xx.tar.gz包</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -axf nginx-1.19.1.tar.gz </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>进入解压目录，执行.&#x2F;configure 设置安装路径和运行账户</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/nginx-1.19.1 </span><br><span class="line">./configure --prefix=/usr/local/nginx --user=nginx --group=nginx </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>make&amp;&amp;make install</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置网页</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt;/usr/local/nginx/conf/nginx.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">worker_processes 1;</span></span><br><span class="line"><span class="string">events &#123;</span></span><br><span class="line"><span class="string">    worker_connections  1024;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">http &#123;</span></span><br><span class="line"><span class="string">     include            mime.types;</span></span><br><span class="line"><span class="string">     default_type       application/octet-stream;</span></span><br><span class="line"><span class="string">     sendfile           on;</span></span><br><span class="line"><span class="string">     keepalive_timeout  65;</span></span><br><span class="line"><span class="string">     charset            utf-8;</span></span><br><span class="line"><span class="string">     server &#123;</span></span><br><span class="line"><span class="string">        listen          80;</span></span><br><span class="line"><span class="string">        server_name     localhost;</span></span><br><span class="line"><span class="string">        include         conf.d/*.conf;</span></span><br><span class="line"><span class="string">        location / &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">            index       index.html index.htm;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        error_page 500 502 503 504  /50x.html;</span></span><br><span class="line"><span class="string">            location =  /50x.html &#123;</span></span><br><span class="line"><span class="string">            root        html;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">     &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建辅助配置文件目录</span></span><br><span class="line">[ -d /usr/local/nginx/conf/conf.d ] || <span class="built_in">mkdir</span> -p /usr/local/nginx/conf/conf.d</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="2-3-设置环境变量，同时设置开机自启"><a href="#2-3-设置环境变量，同时设置开机自启" class="headerlink" title="2.3 设置环境变量，同时设置开机自启"></a>2.3 设置环境变量，同时设置开机自启</h4><p>1、设置变量</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/profile.d/nginx.sh&lt;&lt;<span class="string">EOF </span></span><br><span class="line"><span class="string">export PATH=&quot;/usr/local/nginx/sbin:\$PATH&quot; </span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
-
-<p>2、刷新环境</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile </span><br></pre></td></tr></table></figure>
-
-<p>3、启停：Nginx 服务进程 </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/usr/local/nginx/sbin/nginx&quot;</span> &gt;&gt; /etc/rc.d/rc.local 	<span class="comment">## 设置：开机自启动 </span></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/rc.d/rc.local </span><br><span class="line">nginx 或 nginx -c /usr/local/nginx/conf/nginx.conf           <span class="comment">## 启动：Nginx 服务 </span></span><br></pre></td></tr></table></figure>
-
-<h4 id="2-4-访问"><a href="#2-4-访问" class="headerlink" title="2.4 访问"></a>2.4 访问</h4><p>直接浏览器输入虚拟机ip地址测试</p>
-<h3 id="三、nginx常用命令和配置文件"><a href="#三、nginx常用命令和配置文件" class="headerlink" title="三、nginx常用命令和配置文件"></a>三、nginx常用命令和配置文件</h3><h4 id="3-1-常用命令"><a href="#3-1-常用命令" class="headerlink" title="3.1 常用命令"></a>3.1 常用命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#查看版本</span></span><br><span class="line">nginx -v</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查配置文件错误</span></span><br><span class="line">nginx -t</span><br><span class="line"></span><br><span class="line"><span class="comment">#启动nginx</span></span><br><span class="line">nginx</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭nginx</span></span><br><span class="line">nginx -s stop</span><br><span class="line"></span><br><span class="line"><span class="comment">#重加载nginx</span></span><br><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-2-配置文件详细讲解"><a href="#3-2-配置文件详细讲解" class="headerlink" title="3.2 配置文件详细讲解"></a>3.2 配置文件详细讲解</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#配置文件位置</span></span><br><span class="line">位置：/usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">★ 查看：&lt;Nginx 主配置文件&gt;的&lt;默认配置&gt;</span><br><span class="line"><span class="comment"># cat /usr/local/nginx/conf/nginx.conf | grep -vE &quot;^\s*(#|$)&quot;</span></span><br><span class="line">worker_processes  1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">    	<span class="comment">## 导入：&lt;MIME 类型定义配置文件&gt;，其&lt;路径&gt;相对于[当前目录]</span></span><br><span class="line">		<span class="comment">## &lt;mime.type 配置文件&gt;定义：什么类型的&lt;文件&gt;，需用什么&lt;应用组件&gt;打开？</span></span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;	<span class="comment">## 设置语音编码为utf-8，使其页面支持中文</span></span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;		<span class="comment">## 设置：侦听端口和 IP 地址</span></span><br><span class="line">        server_name     localhost;</span><br><span class="line">        <span class="comment">## 导入：&lt;自定义配置文件&gt;（可以是相对路径 ☚ 以&lt;主配置文件&gt;的&lt;当前目录&gt;为&lt;根目录&gt;）</span></span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;	<span class="comment">## 定义：&lt;默认首页文件名&gt;</span></span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-3-理解：的及"><a href="#3-3-理解：的及" class="headerlink" title="3.3 理解：&lt;Nginx 主配置文件&gt;的&lt;语法格式&gt;及&lt;默认配置&gt;"></a>3.3 理解：&lt;Nginx 主配置文件&gt;的&lt;语法格式&gt;及&lt;默认配置&gt;</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">              ┍</span><br><span class="line">main 主配置段 ┤ worker_processes 1; <span class="comment">## 指定：&lt;nginx: worker process 工作进程&gt;的&lt;数量&gt;</span></span><br><span class="line">              │ <span class="comment">## 单 CPU，建议：1 个</span></span><br><span class="line">              │ <span class="comment">## 多 CPU，建议：CPU 总核心数</span></span><br><span class="line">              └</span><br><span class="line">                 ┍ events &#123;</span><br><span class="line">evens 事件配置段 ┤ worker_connections 1024; <span class="comment">## 设置：单个工作进程的&lt;并发最大连接&gt;</span></span><br><span class="line">                 └ &#125;</span><br><span class="line">               ┍ http &#123;</span><br><span class="line">               │ include mime.types;</span><br><span class="line">               │ default_type application/octet-stream;</span><br><span class="line">               │ sendfile on;</span><br><span class="line">               │ keepalive_timeout 65;</span><br><span class="line">               │ server &#123; ─────────────────────────────┐</span><br><span class="line">               │ listen 80;                            │</span><br><span class="line">http 网站配置段 ┤ server_name localhost;                 │</span><br><span class="line">               │ ┍ location / &#123;                        │</span><br><span class="line">               │ │ root html;                          │</span><br><span class="line">               │ │ index index.html index.htm;         ├定义：虚拟主机</span><br><span class="line">               │ └ &#125;                                   │</span><br><span class="line">               │ error_page 500 502 503 504 /50x.html; │</span><br><span class="line">               │ ┍ location = /50x.html &#123;              │</span><br><span class="line">               │ │ root html;                          │</span><br><span class="line">               │ └ &#125;                                   │</span><br><span class="line">               │ &#125;─────────────────────────────────────┘</span><br><span class="line">               └ &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="四、Nginx反向代理与负载均衡"><a href="#四、Nginx反向代理与负载均衡" class="headerlink" title="四、Nginx反向代理与负载均衡"></a>四、Nginx反向代理与负载均衡</h2><h4 id="4-1-反向代理"><a href="#4-1-反向代理" class="headerlink" title="4.1 反向代理"></a>4.1 反向代理</h4><p><strong>反向代理：</strong>正好相反。对于客户端来说，反向代理就好像目标服务器。并且客户端不需要进行任何设置。客户端向反向代理发送请求，接着反向代理判断请求走向何处，并将请求转交给客户端，使得这些内容就好像它自己的一样，一次客户端并会并会不感知到反向代理后面的服务，因此不需要客户端做任何设置，只需要把反向代理服务器当成真正的服务器就好了。</p>
-<h4 id="4-2-负载均衡"><a href="#4-2-负载均衡" class="headerlink" title="4.2 负载均衡"></a>4.2 负载均衡</h4><p>负载均衡建立在现有网络结构之上，它提供一种链家有效透明的方法扩展网络设备和服务器的宽带、增加吞吐量，加强网络数据处理能力，提高网络的灵活性和可用性。</p>
-<h4 id="Nginx-proxy反向代理模块-（默认安装）"><a href="#Nginx-proxy反向代理模块-（默认安装）" class="headerlink" title="Nginx proxy反向代理模块 （默认安装）"></a>Nginx proxy反向代理模块 （默认安装）</h4><p>功能 1：可以作为&lt;应用程序网关&gt;<br>    对外隐藏：&lt;内网服务器&gt;的&lt;IP地址&gt;<br>    对外发布：&lt;内网服务器&gt;的&lt;服务资源&gt;<br>功能 2：可以实现&lt;动静分离&gt;<br>    通过 location URI 地址匹配，实现：转发&lt;动态网页的请求&gt;。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">        location / &#123;		</span><br><span class="line">        proxy_pass http://服务器池;	 </span><br><span class="line">&#125;									<span class="comment">##&lt;上游服务器&gt;指 被反向代理的服务器</span></span><br><span class="line">     或 proxy_pass http://后端服务器池的名字；</span><br><span class="line">     </span><br><span class="line"><span class="comment">## 例如：</span></span><br><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">location / &#123;</span><br><span class="line">....</span><br><span class="line">        proxy_pass http://xm;	 </span><br><span class="line">&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<h4 id="Nginx-upstream-上游模块（负载均衡）"><a href="#Nginx-upstream-上游模块（负载均衡）" class="headerlink" title="Nginx upstream 上游模块（负载均衡）"></a>Nginx upstream 上游模块（负载均衡）</h4><p>#指令 和 功能<br>upstream		 定义：一个命名的&lt;后端服务器池&gt;<br>server				定义：服务器池里的服务器<br>ip_hash			 启用：基于&lt;IP地址哈希值&gt;的&lt;负载均衡算法&gt;</p>
-<h4 id="负载均衡的部署方式"><a href="#负载均衡的部署方式" class="headerlink" title="负载均衡的部署方式"></a>负载均衡的部署方式</h4><p>1.轮询（默认）</p>
-<p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器down掉，能自动剔除</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">    upstream xm &#123;	<span class="comment">##xm 服务器池的命名,不要有下划线</span></span><br><span class="line">		server ip地址:80;	<span class="comment">##上游服务器ip:端口</span></span><br><span class="line">		server ip地址:80;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 例如：</span></span><br><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;		<span class="comment">## 定义test组</span></span><br><span class="line">        server 192.168.106.147:80;	<span class="comment">## 定义test组里有那些机器</span></span><br><span class="line">        server 192.168.106.148:80;	<span class="comment">## 这几条ip换成自己web服务器的IP地址</span></span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;	<span class="comment">## 有请求就转发到test组</span></span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>2.weight (权重)<br>权重越大，被分配到的任务越多，被访问的概率越高</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">	upstream xm &#123;</span><br><span class="line">		server ip地址:80 weight=7;   <span class="comment">#默认weight=1</span></span><br><span class="line">		server ip地址:80 weight=3;</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#如上例，分别是70%和30%</span></span><br><span class="line"></span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment">## 例如：</span></span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;	<span class="comment">## 定义test组</span></span><br><span class="line">        server 192.168.106.147:80 weight=7; <span class="comment">## 定义test组内的机器</span></span><br><span class="line">        server 192.168.106.148:80 weight=3; <span class="comment">## 定义test组内的机器</span></span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;</span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>3.ip_hash(哈希算法)<br>客户第一次访问某个服务器后短时间断开，再次访问自动定位到该服务器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/local/nginx/conf/nginx.conf</span><br><span class="line">....</span><br><span class="line">http &#123;</span><br><span class="line">	upstream xm &#123;</span><br><span class="line">		ip_hash;</span><br><span class="line">		server ip地址:80;</span><br><span class="line">		server ip地址:80;</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">保存后出去重载文件</span><br><span class="line">nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 例如：</span></span><br><span class="line">worker_processes 1;</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">     include            mime.types;</span><br><span class="line">     default_type       application/octet-stream;</span><br><span class="line">     sendfile           on;</span><br><span class="line">     keepalive_timeout  65;</span><br><span class="line">     charset            utf-8;</span><br><span class="line">     upstream <span class="built_in">test</span> &#123;</span><br><span class="line">     	ip_hash;		<span class="comment">## 定义哈希算法</span></span><br><span class="line">        server 192.168.106.147:80;</span><br><span class="line">        server 192.168.106.148:80;</span><br><span class="line">     &#125;</span><br><span class="line">     server &#123;</span><br><span class="line">        listen          80;</span><br><span class="line">        server_name     localhost;</span><br><span class="line">        include         conf.d/*.conf;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root        html;</span><br><span class="line">            index       index.html index.htm;</span><br><span class="line">            proxy_pass  http://test;</span><br><span class="line">        &#125;</span><br><span class="line">        error_page 500 502 503 504  /50x.html;</span><br><span class="line">            location =  /50x.html &#123;</span><br><span class="line">            root        html;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="五、Nginx-php动静分离"><a href="#五、Nginx-php动静分离" class="headerlink" title="五、Nginx+php动静分离"></a>五、Nginx+php动静分离</h2><p>为了加快网站的解析速度，可以把动态页面和静态页面由不同的服务器来解析，加快解析速度，降低原来单个服务器的压力。一般来说，都需要将动态资源和静态资源分开，由于Nginx的高并发和静态资源缓存等特性，经常将静态资源部署在Nginx上。如果请求的是静态资源，直接到静态资源目录获取资源，如果是童泰资源的请求，则利用反向代理的原理，把请求转发给对应后台应用去处理，从而实现动静分离。</p>
-<h5 id="1-动态和静态分离主要是通过nginx-PHP-FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。"><a href="#1-动态和静态分离主要是通过nginx-PHP-FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。" class="headerlink" title="1. 动态和静态分离主要是通过nginx + PHP FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。"></a>1. 动态和静态分离主要是通过nginx + PHP FPM实现的，其中nginx处理图片、html等静态文件，PHP处理动态程序。</h5><h5 id="2-动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。"><a href="#2-动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。" class="headerlink" title="2. 动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。"></a>2. 动态静态分离是指在web服务器架构中，将静态页面与动态页面或静态内容接口与动态内容接口分离，从而提高整个服务的访问性能和可维护性的架构设计方法。</h5><h5 id="3-简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html-nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理"><a href="#3-简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html-nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理" class="headerlink" title="3. 简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html, nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理"></a>3. 简单地说，当用户请求时，如果他只是访问静态请求，比如图片和html, nginx会直接返回。如果他发送了一个动态请求，nginx会把这个请求发送给程序进行动态处理</h5><h4 id="1、配合php实现动态页面和静态页面分开处理"><a href="#1、配合php实现动态页面和静态页面分开处理" class="headerlink" title="1、配合php实现动态页面和静态页面分开处理"></a>1、配合php实现动态页面和静态页面分开处理</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1、删除httpd</span><br><span class="line">rpm -e httpd --nodeps</span><br><span class="line">2、安装php及其组件</span><br><span class="line">yum install -y php php-devel php-mysql</span><br><span class="line">yum install -y php-fpm</span><br><span class="line">3、启动php及其组件，同时将其加入开机自启</span><br><span class="line">systemctl <span class="built_in">enable</span> php-fpm</span><br><span class="line">systemctl start php-fpm</span><br></pre></td></tr></table></figure>
-
-<p>2、修改运行用户</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i -r <span class="string">&#x27;s/^\s*user\s*=.*/user = nginx/&#x27;</span> /etc/php-fpm.d/www.conf</span><br><span class="line">sed -i -r <span class="string">&#x27;s/^\s*group\s*=.*/group = nginx/&#x27;</span> /etc/php-fpm.d/www.conf</span><br></pre></td></tr></table></figure>
-
-<p>重启服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart php-fpm</span><br></pre></td></tr></table></figure>
-
-<p>3、修改配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/conf/conf.d/location_php.conf &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">location ~ \.php$ &#123;</span></span><br><span class="line"><span class="string">            root           html;</span></span><br><span class="line"><span class="string">            fastcgi_index  index.php;</span></span><br><span class="line"><span class="string">            fastcgi_pass   127.0.0.1:9000;</span></span><br><span class="line"><span class="string">            include        fastcgi_params;</span></span><br><span class="line"><span class="string">            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;</span></span><br><span class="line"><span class="string">            if (!-f \$document_root\$fastcgi_script_name) &#123;</span></span><br><span class="line"><span class="string">                        return             404;</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
-
-<p>重载nginx</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
-
-<p>4、编写php页面</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /usr/local/nginx/html/index.php &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string">            phpinfo();</span></span><br><span class="line"><span class="string">?&gt;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Linux基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MQTT</title>
-    <url>/2024/12/04/MQTT/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>​		MQTT（Message Queuing Telemetry Transport）是一种轻量级的物联网通信协议，基于发布&#x2F;订阅模式，支持QoS级别，适用于低带宽、高延迟的网络环境。它具有精简的协议设计，开放的消息协议，以及广泛应用于物联网、M2M通信、消息推送和智能设备等领域。MQTT协议涉及发布者、订阅者和消息代理（Broker）的角色，以及连接、订阅、发布消息的过程，并包含会话保持和心跳机制，确保消息的可靠传输。</p>
-<p>MQTT官方文档：<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
-<h1 id="1-MQTT协议概念"><a href="#1-MQTT协议概念" class="headerlink" title="1 MQTT协议概念:"></a>1 MQTT协议概念:</h1><h3 id="1-1-MQTT特点"><a href="#1-1-MQTT特点" class="headerlink" title="1.1 MQTT特点:"></a>1.1 MQTT特点:</h3><ul>
-<li><strong>轻量级</strong>：物联网设备通常在处理能力、内存和能耗方面受到限制。MQTT 开销低、报文小的特点使其非常适合这些设备，因为它消耗更少的资源，即使在有限的能力下也能实现高效的通信。</li>
-<li><strong>可靠</strong>：物联网网络常常面临高延迟或连接不稳定的情况。MQTT 支持多种 QoS 等级、会话感知和持久连接，即使在困难的条件下也能保证消息的可靠传递，使其非常适合物联网应用。</li>
-<li><strong>安全通信</strong>：安全对于物联网网络至关重要，因为其经常涉及敏感数据的传输。为确保数据在传输过程中的机密性，MQTT 提供传输层安全（TLS）和安全套接层（SSL）加密功能。此外，MQTT 还通过用户名&#x2F;密码凭证或客户端证书提供身份验证和授权机制，以保护网络及其资源的访问。</li>
-<li><strong>双向通信</strong>：MQTT 的发布-订阅模式为设备之间提供了无缝的双向通信方式。客户端既可以向主题发布消息，也可以订阅接收特定主题上的消息，从而实现了物联网生态系统中的高效数据交换，而无需直接将设备耦合在一起。这种模式也简化了新设备的集成，同时保证了系统易于扩展。</li>
-<li><strong>连续、有状态的会话</strong>：MQTT 提供了客户端与 Broker 之间保持有状态会话的能力，这使得系统即使在断开连接后也能记住订阅和未传递的消息。此外，客户端还可以在建立连接时指定一个保活间隔，这会促使 Broker 定期检查连接状态。如果连接中断，Broker 会储存未传递的消息（根据 QoS 级别确定），并在客户端重新连接时尝试传递它们。这个特性保证了通信的可靠性，降低了因间断性连接而导致数据丢失的风险。</li>
-<li><strong>大规模物联网设备支持</strong>：物联网系统往往涉及大量设备，需要一种能够处理大规模部署的协议。MQTT 的轻量级特性、低带宽消耗和对资源的高效利用使其成为大规模物联网应用的理想选择。通过采用发布-订阅模式，MQTT 实现了发送者和接收者的解耦，从而有效地减少了网络流量和资源使用。此外，协议对不同 QoS 等级的支持使得消息传递可以根据需求进行定制，确保在各种场景下获得最佳的性能表现。</li>
-</ul>
-<h1 id="2-MQTT-的工作原理："><a href="#2-MQTT-的工作原理：" class="headerlink" title="2 MQTT 的工作原理："></a>2 MQTT 的工作原理：</h1><h2 id="2-1-MQTT基本组件"><a href="#2-1-MQTT基本组件" class="headerlink" title="2.1 MQTT基本组件"></a>2.1 MQTT基本组件</h2><p>要了解 MQTT 的工作原理，首先需要掌握以下几个概念：MQTT 客户端、MQTT Broker、发布-订阅模式、主题、QoS。</p>
-<p><strong>MQTT 客户端</strong></p>
-<p>任何运行 MQTT 客户端库的应用或设备都是 MQTT 客户端。例如，使用 MQTT 的即时通讯应用是客户端，使用 MQTT 上报数据的各种传感器是客户端，各种 MQTT 测试工具也是客户端。客户端可以：</p>
-<ol>
-<li>发布其他客户端可能会订阅的信息</li>
-<li>订阅其他客户端发布的消息</li>
-<li>退定或删除应用程序的消息</li>
-<li>断开与服务器的连接</li>
-</ol>
-<p><strong>MQTT 服务端</strong></p>
-<p>MQTT Broker 是负责处理客户端请求的关键组件，同时还负责消息的转发。一个高效强大的 MQTT Broker 能够轻松应对海量连接和百万级消息吞吐量，从而帮助物联网服务提供商专注于业务发展，快速构建可靠的 MQTT 应用。 服务端可以：</p>
-<ol>
-<li>接受来自客户的网络连接</li>
-<li>接受客户发布的应用信息</li>
-<li>处理来自客户端的订阅和退订请求</li>
-<li>向订阅的客户转发应用程序消息</li>
-</ol>
-<p><strong>发布-订阅模式</strong></p>
-<p>发布-订阅模式与客户端-服务器模式的不同之处在于，它将发送消息的客户端（发布者）和接收消息的客户端（订阅者）进行了解耦。发布者和订阅者之间无需建立直接连接，而是通过 MQTT Broker 来负责消息的路由和分发。</p>
-<p>下图展示了 MQTT 发布&#x2F;订阅过程。温度传感器作为客户端连接到 MQTT Broker，并通过发布操作将温度数据发布到一个特定主题（例如 <code>Temperature</code>）。MQTT Broker 接收到该消息后会负责将其转发给订阅了相应主题（<code>Temperature</code>）的订阅者客户端。</p>
-<p><strong>主题</strong></p>
-<p>MQTT 协议根据主题来转发消息。主题通过 <code>/</code> 来区分层级，类似于 URL 路径，例如：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chat<span class="regexp">/room/</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/10/</span>temperature</span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/+/</span>temperature</span><br></pre></td></tr></table></figure>
-
-<p>MQTT 主题支持以下两种通配符：<code>+</code> 和 <code>#</code>。</p>
-<ul>
-<li><code>+</code>：表示单层通配符，例如 <code>a/+</code> 匹配 <code>a/x</code> 或 <code>a/y</code>。</li>
-<li><code>#</code>：表示多层通配符，例如 <code>a/#</code> 匹配 <code>a/x</code>、<code>a/b/c/d</code>。</li>
-</ul>
-<blockquote>
-<p><strong>注意</strong>：通配符主题只能用于订阅，不能用于发布。</p>
-</blockquote>
-<p><strong>QoS</strong></p>
-<p>MQTT 提供了三种服务质量（QoS），在不同网络环境下保证消息的可靠性。</p>
-<ul>
-<li>QoS 0：消息最多传送一次。如果当前客户端不可用，它将丢失这条消息。</li>
-<li>QoS 1：消息至少传送一次。</li>
-<li>QoS 2：消息只传送一次。</li>
-</ul>
-<h2 id="2-2-MQTT-的工作流程"><a href="#2-2-MQTT-的工作流程" class="headerlink" title="2.2 MQTT 的工作流程"></a>2.2 MQTT 的工作流程</h2><p>​		实现MQTT协议需要客户端和服务器端通讯完成， 在通讯过程中, MQTT协议中有三种身份: 发布者(Publish)、代理(Broker)(服务器)、订阅者(Subscribe)。 其中，消息的发布者和订阅者都是客户端，消息代理是服务器，消息发布者可以同时是订阅者。</p>
-<ol>
-<li><strong>客户端使用 TCP&#x2F;IP 协议与 Broker 建立连接</strong>，可以选择使用 TLS&#x2F;SSL 加密来实现安全通信。客户端提供认证信息，并指定会话类型（Clean Session 或 Persistent Session）。</li>
-<li><strong>客户端既可以向特定主题发布消息，也可以订阅主题以接收消息</strong>。当客户端发布消息时，它会将消息发送给 MQTT Broker；而当客户端订阅消息时，它会接收与订阅主题相关的消息。</li>
-<li><strong>MQTT Broker 接收发布的消息</strong>，并将这些消息转发给订阅了对应主题的客户端。它根据 QoS 等级确保消息可靠传递，并根据会话类型为断开连接的客户端存储消息</li>
-</ol>
-<h2 id="2-3-MQTT协议设计规范"><a href="#2-3-MQTT协议设计规范" class="headerlink" title="2.3  MQTT协议设计规范"></a>2.3  MQTT协议设计规范</h2><ol>
-<li><strong>精简</strong>，不添加可有可无的功能；</li>
-<li><strong>发布&#x2F;订阅(Pub&#x2F;Sub)模式</strong>，方便消息在传感器之间传递，解耦Client&#x2F;Server模式，带来的好处在于不必预先知道对方的存在(ip&#x2F;port), 不必同时运行</li>
-<li>允许用户<strong>动态创建主题</strong>(不需要预先创建主题)，零运维成本；</li>
-<li>把传输量降到<strong>最低</strong>以提高传输效率</li>
-<li>把<strong>低带宽、高延迟、不稳定</strong>的网络等因素考虑在内；</li>
-<li>支持连续的会话保持和控制(<strong>心跳协议</strong>)</li>
-<li>客户端<strong>计算能力</strong>要求不高</li>
-<li>提供服务质量( quality of service level: <strong>QoS</strong>)管理:</li>
-<li>不强求传输数据的类型与格式，<strong>保持灵活性</strong>(指的使应用层业务数据)</li>
-</ol>
-<h3 id="2-4-MQTT协议主要特性"><a href="#2-4-MQTT协议主要特性" class="headerlink" title="2.4 MQTT协议主要特性"></a>2.4 MQTT协议主要特性</h3><ol>
-<li>开放消息协议，简单易实现。</li>
-<li>使用发布&#x2F;订阅消息模式，提供一对多的消息发布，解除应用程序耦合。</li>
-<li>对负载（协议携带的应用数据）内容屏蔽的消息传输。</li>
-<li>基于TCP&#x2F;IP网络连接,提供有序，无损，双向连接。主流的MQTT是基于TCP连接进行数据推送的，但是同样有基于UDP的版本，叫做MQTT-SN。这两种版本由于基于不同的连接方式，优缺点自然也就各有不同了。由于基于不同的连接方式，优缺点自然也就各有不同了。</li>
-<li>消息服务质量(QoS）支持，可靠传输保证;有三种消息发布服务质量:<br>QoSO:“至多一次”，消息发布完全依赖底层TCP&#x2F;IP网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。这一种方式主要普通APP的推送，倘若你的智能设备在消息推送时未联网，推送过去没收到，再次联网也就收不到了。QoS1:“至少—次”，确保消息到达，但消息重复可能会发生。QoS2:“只有一次”，确保消息到达一次。在一些要求比较严格的计费系统中，可以使用此级别。在计费系统中，消息重复或丢失会导致不正确的结果。这种最高质量的消息发布服务还可以用于即时通讯类的APP的推送，确保用户收到且只会收到一次。</li>
-<li>1字节固定报头，2字节心跳报文，最小化传输开销和协议交换，有效减少网络流量。<br>这就是为什么在介绍里说它非常适合”在物联网领域，传感器与服务器的通信，信息的收集，要知道嵌入式设备的运算能力和带宽都相对薄弱，使用这种协议来传递消息再适合不过了。</li>
-<li>在线状态感知:使用Last Will和Testament特性通知有关各方客户端异常中断的机制。<br>Last Will:即遗言机制，用于通知同一主题下的其他设备，发送遗言的设备已经断开了连接。<br>Testament:遗嘱机制，功能类似于Last Will。</li>
-</ol>
-<h3 id="2-5-MQTT协议中的方法"><a href="#2-5-MQTT协议中的方法" class="headerlink" title="2.5 MQTT协议中的方法"></a>2.5 MQTT协议中的方法</h3><p>MQTT协议中定义了一些方法(也被称为动作)，来于表示对确定资源所进行操作。这个资源可以代表预先存在的数据或动态生成数据，这取决于服务器的实现。通常来说，资源指服务器上的文件或输出。主要方法有:</p>
-<ol>
-<li>CONNECT: 客户端连接到服务器</li>
-<li>CONNACK: 连接确认</li>
-<li>PUBLISH: 发布消息</li>
-<li>PUBACK: 发布消息确认</li>
-<li>PUBREC: 发布的消息已接收</li>
-<li>PUBREL: 发布的消息已释放</li>
-<li>PUBCOMP: 发布完成</li>
-<li>SUBSCRIBE: 订阅请求</li>
-<li>SUBACK: 订阅确认</li>
-<li>UNSUBSCRIBE: 取消订阅</li>
-<li>UNSUBACK: 取消订阅确认</li>
-<li>PINGREQ: 客户端发送心跳</li>
-<li>PINGRESP: 服务端心跳响应</li>
-<li>DISCONNECT: 断开连接</li>
-<li>AUTH: 认证</li>
-</ol>
-<h2 id="3-MQTT协议数据包结构"><a href="#3-MQTT协议数据包结构" class="headerlink" title="3 MQTT协议数据包结构"></a>3 MQTT协议数据包结构</h2><p>​		在MQTT协议中，一个MQTT数据包由: 固定头(Fixed header)、可变头(Variable header)、消息体(payload)三部分构成。</p>
-<ol>
-<li>固定头(Fixed header)。存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识，如连接，发布，订阅，心跳等。其中固定头是必须的，所有类型的MQTT协议中，都必须包含固定头。</li>
-<li>可变头(Variable header)。存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容。可变头部不是可选的意思，而是指这部分在有些协议类型中存在，在有些协议中不存在。</li>
-<li>消息体（Payload)。存在于部分MQTT数据包中，表示客户端收到的具体内容。与可变头一样,在有些协议类型中有消息内容，有些协议类型中没有消息内容。</li>
-</ol>
-<h3 id="3-1-固定头-Fixed-Header"><a href="#3-1-固定头-Fixed-Header" class="headerlink" title="3.1 固定头(Fixed Header)"></a>3.1 固定头(Fixed Header)</h3><pre><code>    固定头存在于所有MQTT数据包中
-</code></pre>
-<p>固定头包含<strong>两部分</strong>内容：<br>        <strong>首字节(字节1)、</strong><br>        剩余消息报文长度(从第二个字节开始，长度为1-4字节)<br>        剩余长度是当前包中剩余内容长度的字节数，包括变量头和有效负载中的数据)。剩余长度不包含用来编码剩		余长度的字节。<br>        剩余长度使用了一种可变长度的结构来编码，这种结构使用单一字节表示0-127的值。大于127的值如下处理。每个字节的低7位用来编码数据，最高位用来表示是否还有后续字节。因此每个字节可以编码128个值，再加上一个标识位。剩余长度最多可以用四个字节来表示。<br>数据包类型</p>
-<p>​		<strong>位置</strong>: 第一个字节(Byte 1)中的7-4个bit被(Bit[7-4]),标识4位无符号值</p>
-<p>​		<strong>标志位</strong>：位置: 第一个字节中的0-3个bit位(Bit[3-0])。意思是字节位Bit[3-0]用作报文的标识。<br>首字节的低4位(bit3-bit0)用来表示某些报文类型的控制字段，实际上只有少数报文类型有控制位</p>
-<h3 id="3-2-可变头-Variable-Header"><a href="#3-2-可变头-Variable-Header" class="headerlink" title="3.2  可变头(Variable Header)"></a>3.2  可变头(Variable Header)</h3><p>可变头的意思是可变化的消息头部。有些报文类型包含可变头部有些报文则不包含。可变头部在固定头部和消息内容之间，其内容根据报文类型不同而不同</p>
-<h3 id="3-3-消息体-Payload"><a href="#3-3-消息体-Payload" class="headerlink" title="3.3  消息体(Payload)"></a>3.3  消息体(Payload)</h3><p>有些报文类型是包含Payload的,Payload的意思是消息载体的意思<br>如PUBLISH的Payload就是指消息内容(应用程序发布的消息内容)。而CONNECT的Payload则包含Client Identifier, Will Topic, Will Message, Username, Password等信息</p>
-<p>参考文献：</p>
-<p><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
-<p><a href="https://www.emqx.com/zh/blog/category/mqtt-programming">博客 - MQTT 编程 | EMQ</a></p>
-<p><a href="https://developer.aliyun.com/article/1261805">MQTT 协议入门：基础知识和快速教程-阿里云开发者社区</a></p>
-<p><a href="https://blog.csdn.net/jackwmj12/article/details/129163012">MQTT协议详解(完整版)-CSDN博客</a></p>
-]]></content>
-      <tags>
-        <tag>网络协议</tag>
       </tags>
   </entry>
 </search>
