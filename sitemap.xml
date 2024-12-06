@@ -2,6 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://cookeisl.top/link/index.html</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/glink/index.html</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/about1/index.html</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/about/index.html</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/messageboard/index.html</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://cookeisl.top/2024/11/30/QQ%E5%86%9C%E5%9C%BA%E6%90%AD%E5%BB%BA%E6%96%B9%E6%A1%88/</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://cookeisl.top/2024/12/04/MQTT/</loc>
     
     <lastmod>2024-12-04</lastmod>
@@ -20,25 +83,7 @@
   </url>
   
   <url>
-    <loc>http://cookeisl.top/2024/11/30/QQ%E5%86%9C%E5%9C%BA%E6%90%AD%E5%BB%BA%E6%96%B9%E6%A1%88/</loc>
-    
-    <lastmod>2024-12-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://cookeisl.top/music/index.html</loc>
-    
-    <lastmod>2024-12-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://cookeisl.top/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</loc>
     
     <lastmod>2024-12-04</lastmod>
     
@@ -59,15 +104,6 @@
     <loc>http://cookeisl.top/games/index.html</loc>
     
     <lastmod>2024-12-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://cookeisl.top/link/index.html</loc>
-    
-    <lastmod>2024-12-02</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -100,19 +136,10 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>http://cookeisl.top/tlink/index.html</loc>
-    
-    <lastmod>2024-12-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>http://cookeisl.top/</loc>
-    <lastmod>2024-12-05</lastmod>
+    <lastmod>2024-12-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -120,14 +147,14 @@
   
   <url>
     <loc>http://cookeisl.top/tags/Linux%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2024-12-05</lastmod>
+    <lastmod>2024-12-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://cookeisl.top/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2024-12-05</lastmod>
+    <lastmod>2024-12-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

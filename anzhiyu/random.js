@@ -1,1 +1,1 @@
-var posts=["2024/12/04/HA高可用服务搭建/","2024/12/04/MQTT/","2024/11/30/Linux操作基础/","2024/11/30/Nginx搭建与管理/","2024/11/30/QQ农场搭建方案/"];function toRandomPost(){pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);};
+var posts=["2024/11/30/Linux操作基础/","2024/12/04/HA高可用服务搭建/","2024/11/30/Nginx搭建与管理/","2024/12/04/MQTT/","2024/11/30/QQ农场搭建方案/"];function toRandomPost(){pjax.loadUrl('/'+posts[Math.floor(Math.random() * posts.length)]);};
