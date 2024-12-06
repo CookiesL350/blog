@@ -181,125 +181,6 @@ x	可执行		进入目录		执行文件
       </tags>
   </entry>
   <entry>
-    <title>MQTT</title>
-    <url>/2024/12/04/MQTT/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>​		MQTT（Message Queuing Telemetry Transport）是一种轻量级的物联网通信协议，基于发布&#x2F;订阅模式，支持QoS级别，适用于低带宽、高延迟的网络环境。它具有精简的协议设计，开放的消息协议，以及广泛应用于物联网、M2M通信、消息推送和智能设备等领域。MQTT协议涉及发布者、订阅者和消息代理（Broker）的角色，以及连接、订阅、发布消息的过程，并包含会话保持和心跳机制，确保消息的可靠传输。</p>
-<p>MQTT官方文档：<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
-<h1 id="1-MQTT协议概念"><a href="#1-MQTT协议概念" class="headerlink" title="1 MQTT协议概念:"></a>1 MQTT协议概念:</h1><h3 id="1-1-MQTT特点"><a href="#1-1-MQTT特点" class="headerlink" title="1.1 MQTT特点:"></a>1.1 MQTT特点:</h3><ul>
-<li><strong>轻量级</strong>：物联网设备通常在处理能力、内存和能耗方面受到限制。MQTT 开销低、报文小的特点使其非常适合这些设备，因为它消耗更少的资源，即使在有限的能力下也能实现高效的通信。</li>
-<li><strong>可靠</strong>：物联网网络常常面临高延迟或连接不稳定的情况。MQTT 支持多种 QoS 等级、会话感知和持久连接，即使在困难的条件下也能保证消息的可靠传递，使其非常适合物联网应用。</li>
-<li><strong>安全通信</strong>：安全对于物联网网络至关重要，因为其经常涉及敏感数据的传输。为确保数据在传输过程中的机密性，MQTT 提供传输层安全（TLS）和安全套接层（SSL）加密功能。此外，MQTT 还通过用户名&#x2F;密码凭证或客户端证书提供身份验证和授权机制，以保护网络及其资源的访问。</li>
-<li><strong>双向通信</strong>：MQTT 的发布-订阅模式为设备之间提供了无缝的双向通信方式。客户端既可以向主题发布消息，也可以订阅接收特定主题上的消息，从而实现了物联网生态系统中的高效数据交换，而无需直接将设备耦合在一起。这种模式也简化了新设备的集成，同时保证了系统易于扩展。</li>
-<li><strong>连续、有状态的会话</strong>：MQTT 提供了客户端与 Broker 之间保持有状态会话的能力，这使得系统即使在断开连接后也能记住订阅和未传递的消息。此外，客户端还可以在建立连接时指定一个保活间隔，这会促使 Broker 定期检查连接状态。如果连接中断，Broker 会储存未传递的消息（根据 QoS 级别确定），并在客户端重新连接时尝试传递它们。这个特性保证了通信的可靠性，降低了因间断性连接而导致数据丢失的风险。</li>
-<li><strong>大规模物联网设备支持</strong>：物联网系统往往涉及大量设备，需要一种能够处理大规模部署的协议。MQTT 的轻量级特性、低带宽消耗和对资源的高效利用使其成为大规模物联网应用的理想选择。通过采用发布-订阅模式，MQTT 实现了发送者和接收者的解耦，从而有效地减少了网络流量和资源使用。此外，协议对不同 QoS 等级的支持使得消息传递可以根据需求进行定制，确保在各种场景下获得最佳的性能表现。</li>
-</ul>
-<h1 id="2-MQTT-的工作原理："><a href="#2-MQTT-的工作原理：" class="headerlink" title="2 MQTT 的工作原理："></a>2 MQTT 的工作原理：</h1><h2 id="2-1-MQTT基本组件"><a href="#2-1-MQTT基本组件" class="headerlink" title="2.1 MQTT基本组件"></a>2.1 MQTT基本组件</h2><p>要了解 MQTT 的工作原理，首先需要掌握以下几个概念：MQTT 客户端、MQTT Broker、发布-订阅模式、主题、QoS。</p>
-<p><strong>MQTT 客户端</strong></p>
-<p>任何运行 MQTT 客户端库的应用或设备都是 MQTT 客户端。例如，使用 MQTT 的即时通讯应用是客户端，使用 MQTT 上报数据的各种传感器是客户端，各种 MQTT 测试工具也是客户端。客户端可以：</p>
-<ol>
-<li>发布其他客户端可能会订阅的信息</li>
-<li>订阅其他客户端发布的消息</li>
-<li>退定或删除应用程序的消息</li>
-<li>断开与服务器的连接</li>
-</ol>
-<p><strong>MQTT 服务端</strong></p>
-<p>MQTT Broker 是负责处理客户端请求的关键组件，同时还负责消息的转发。一个高效强大的 MQTT Broker 能够轻松应对海量连接和百万级消息吞吐量，从而帮助物联网服务提供商专注于业务发展，快速构建可靠的 MQTT 应用。 服务端可以：</p>
-<ol>
-<li>接受来自客户的网络连接</li>
-<li>接受客户发布的应用信息</li>
-<li>处理来自客户端的订阅和退订请求</li>
-<li>向订阅的客户转发应用程序消息</li>
-</ol>
-<p><strong>发布-订阅模式</strong></p>
-<p>发布-订阅模式与客户端-服务器模式的不同之处在于，它将发送消息的客户端（发布者）和接收消息的客户端（订阅者）进行了解耦。发布者和订阅者之间无需建立直接连接，而是通过 MQTT Broker 来负责消息的路由和分发。</p>
-<p>下图展示了 MQTT 发布&#x2F;订阅过程。温度传感器作为客户端连接到 MQTT Broker，并通过发布操作将温度数据发布到一个特定主题（例如 <code>Temperature</code>）。MQTT Broker 接收到该消息后会负责将其转发给订阅了相应主题（<code>Temperature</code>）的订阅者客户端。</p>
-<p><strong>主题</strong></p>
-<p>MQTT 协议根据主题来转发消息。主题通过 <code>/</code> 来区分层级，类似于 URL 路径，例如：</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chat<span class="regexp">/room/</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/10/</span>temperature</span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/+/</span>temperature</span><br></pre></td></tr></table></figure>
-
-<p>MQTT 主题支持以下两种通配符：<code>+</code> 和 <code>#</code>。</p>
-<ul>
-<li><code>+</code>：表示单层通配符，例如 <code>a/+</code> 匹配 <code>a/x</code> 或 <code>a/y</code>。</li>
-<li><code>#</code>：表示多层通配符，例如 <code>a/#</code> 匹配 <code>a/x</code>、<code>a/b/c/d</code>。</li>
-</ul>
-<blockquote>
-<p><strong>注意</strong>：通配符主题只能用于订阅，不能用于发布。</p>
-</blockquote>
-<p><strong>QoS</strong></p>
-<p>MQTT 提供了三种服务质量（QoS），在不同网络环境下保证消息的可靠性。</p>
-<ul>
-<li>QoS 0：消息最多传送一次。如果当前客户端不可用，它将丢失这条消息。</li>
-<li>QoS 1：消息至少传送一次。</li>
-<li>QoS 2：消息只传送一次。</li>
-</ul>
-<h2 id="2-2-MQTT-的工作流程"><a href="#2-2-MQTT-的工作流程" class="headerlink" title="2.2 MQTT 的工作流程"></a>2.2 MQTT 的工作流程</h2><p>​		实现MQTT协议需要客户端和服务器端通讯完成， 在通讯过程中, MQTT协议中有三种身份: 发布者(Publish)、代理(Broker)(服务器)、订阅者(Subscribe)。 其中，消息的发布者和订阅者都是客户端，消息代理是服务器，消息发布者可以同时是订阅者。</p>
-<ol>
-<li><strong>客户端使用 TCP&#x2F;IP 协议与 Broker 建立连接</strong>，可以选择使用 TLS&#x2F;SSL 加密来实现安全通信。客户端提供认证信息，并指定会话类型（Clean Session 或 Persistent Session）。</li>
-<li><strong>客户端既可以向特定主题发布消息，也可以订阅主题以接收消息</strong>。当客户端发布消息时，它会将消息发送给 MQTT Broker；而当客户端订阅消息时，它会接收与订阅主题相关的消息。</li>
-<li><strong>MQTT Broker 接收发布的消息</strong>，并将这些消息转发给订阅了对应主题的客户端。它根据 QoS 等级确保消息可靠传递，并根据会话类型为断开连接的客户端存储消息</li>
-</ol>
-<h2 id="2-3-MQTT协议设计规范"><a href="#2-3-MQTT协议设计规范" class="headerlink" title="2.3  MQTT协议设计规范"></a>2.3  MQTT协议设计规范</h2><ol>
-<li><strong>精简</strong>，不添加可有可无的功能；</li>
-<li><strong>发布&#x2F;订阅(Pub&#x2F;Sub)模式</strong>，方便消息在传感器之间传递，解耦Client&#x2F;Server模式，带来的好处在于不必预先知道对方的存在(ip&#x2F;port), 不必同时运行</li>
-<li>允许用户<strong>动态创建主题</strong>(不需要预先创建主题)，零运维成本；</li>
-<li>把传输量降到<strong>最低</strong>以提高传输效率</li>
-<li>把<strong>低带宽、高延迟、不稳定</strong>的网络等因素考虑在内；</li>
-<li>支持连续的会话保持和控制(<strong>心跳协议</strong>)</li>
-<li>客户端<strong>计算能力</strong>要求不高</li>
-<li>提供服务质量( quality of service level: <strong>QoS</strong>)管理:</li>
-<li>不强求传输数据的类型与格式，<strong>保持灵活性</strong>(指的使应用层业务数据)</li>
-</ol>
-<h3 id="2-4-MQTT协议主要特性"><a href="#2-4-MQTT协议主要特性" class="headerlink" title="2.4 MQTT协议主要特性"></a>2.4 MQTT协议主要特性</h3><ol>
-<li>开放消息协议，简单易实现。</li>
-<li>使用发布&#x2F;订阅消息模式，提供一对多的消息发布，解除应用程序耦合。</li>
-<li>对负载（协议携带的应用数据）内容屏蔽的消息传输。</li>
-<li>基于TCP&#x2F;IP网络连接,提供有序，无损，双向连接。主流的MQTT是基于TCP连接进行数据推送的，但是同样有基于UDP的版本，叫做MQTT-SN。这两种版本由于基于不同的连接方式，优缺点自然也就各有不同了。由于基于不同的连接方式，优缺点自然也就各有不同了。</li>
-<li>消息服务质量(QoS）支持，可靠传输保证;有三种消息发布服务质量:<br>QoSO:“至多一次”，消息发布完全依赖底层TCP&#x2F;IP网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。这一种方式主要普通APP的推送，倘若你的智能设备在消息推送时未联网，推送过去没收到，再次联网也就收不到了。QoS1:“至少—次”，确保消息到达，但消息重复可能会发生。QoS2:“只有一次”，确保消息到达一次。在一些要求比较严格的计费系统中，可以使用此级别。在计费系统中，消息重复或丢失会导致不正确的结果。这种最高质量的消息发布服务还可以用于即时通讯类的APP的推送，确保用户收到且只会收到一次。</li>
-<li>1字节固定报头，2字节心跳报文，最小化传输开销和协议交换，有效减少网络流量。<br>这就是为什么在介绍里说它非常适合”在物联网领域，传感器与服务器的通信，信息的收集，要知道嵌入式设备的运算能力和带宽都相对薄弱，使用这种协议来传递消息再适合不过了。</li>
-<li>在线状态感知:使用Last Will和Testament特性通知有关各方客户端异常中断的机制。<br>Last Will:即遗言机制，用于通知同一主题下的其他设备，发送遗言的设备已经断开了连接。<br>Testament:遗嘱机制，功能类似于Last Will。</li>
-</ol>
-<h3 id="2-5-MQTT协议中的方法"><a href="#2-5-MQTT协议中的方法" class="headerlink" title="2.5 MQTT协议中的方法"></a>2.5 MQTT协议中的方法</h3><p>MQTT协议中定义了一些方法(也被称为动作)，来于表示对确定资源所进行操作。这个资源可以代表预先存在的数据或动态生成数据，这取决于服务器的实现。通常来说，资源指服务器上的文件或输出。主要方法有:</p>
-<ol>
-<li>CONNECT: 客户端连接到服务器</li>
-<li>CONNACK: 连接确认</li>
-<li>PUBLISH: 发布消息</li>
-<li>PUBACK: 发布消息确认</li>
-<li>PUBREC: 发布的消息已接收</li>
-<li>PUBREL: 发布的消息已释放</li>
-<li>PUBCOMP: 发布完成</li>
-<li>SUBSCRIBE: 订阅请求</li>
-<li>SUBACK: 订阅确认</li>
-<li>UNSUBSCRIBE: 取消订阅</li>
-<li>UNSUBACK: 取消订阅确认</li>
-<li>PINGREQ: 客户端发送心跳</li>
-<li>PINGRESP: 服务端心跳响应</li>
-<li>DISCONNECT: 断开连接</li>
-<li>AUTH: 认证</li>
-</ol>
-<h2 id="3-MQTT协议数据包结构"><a href="#3-MQTT协议数据包结构" class="headerlink" title="3 MQTT协议数据包结构"></a>3 MQTT协议数据包结构</h2><p>​		在MQTT协议中，一个MQTT数据包由: 固定头(Fixed header)、可变头(Variable header)、消息体(payload)三部分构成。</p>
-<ol>
-<li>固定头(Fixed header)。存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识，如连接，发布，订阅，心跳等。其中固定头是必须的，所有类型的MQTT协议中，都必须包含固定头。</li>
-<li>可变头(Variable header)。存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容。可变头部不是可选的意思，而是指这部分在有些协议类型中存在，在有些协议中不存在。</li>
-<li>消息体（Payload)。存在于部分MQTT数据包中，表示客户端收到的具体内容。与可变头一样,在有些协议类型中有消息内容，有些协议类型中没有消息内容。</li>
-</ol>
-<h3 id="3-1-固定头-Fixed-Header"><a href="#3-1-固定头-Fixed-Header" class="headerlink" title="3.1 固定头(Fixed Header)"></a>3.1 固定头(Fixed Header)</h3><pre><code>    固定头存在于所有MQTT数据包中
-</code></pre>
-<p>固定头包含<strong>两部分</strong>内容：<br>        <strong>首字节(字节1)、</strong><br>        剩余消息报文长度(从第二个字节开始，长度为1-4字节)<br>        剩余长度是当前包中剩余内容长度的字节数，包括变量头和有效负载中的数据)。剩余长度不包含用来编码剩		余长度的字节。<br>        剩余长度使用了一种可变长度的结构来编码，这种结构使用单一字节表示0-127的值。大于127的值如下处理。每个字节的低7位用来编码数据，最高位用来表示是否还有后续字节。因此每个字节可以编码128个值，再加上一个标识位。剩余长度最多可以用四个字节来表示。<br>数据包类型</p>
-<p>​		<strong>位置</strong>: 第一个字节(Byte 1)中的7-4个bit被(Bit[7-4]),标识4位无符号值</p>
-<p>​		<strong>标志位</strong>：位置: 第一个字节中的0-3个bit位(Bit[3-0])。意思是字节位Bit[3-0]用作报文的标识。<br>首字节的低4位(bit3-bit0)用来表示某些报文类型的控制字段，实际上只有少数报文类型有控制位</p>
-<h3 id="3-2-可变头-Variable-Header"><a href="#3-2-可变头-Variable-Header" class="headerlink" title="3.2  可变头(Variable Header)"></a>3.2  可变头(Variable Header)</h3><p>可变头的意思是可变化的消息头部。有些报文类型包含可变头部有些报文则不包含。可变头部在固定头部和消息内容之间，其内容根据报文类型不同而不同</p>
-<h3 id="3-3-消息体-Payload"><a href="#3-3-消息体-Payload" class="headerlink" title="3.3  消息体(Payload)"></a>3.3  消息体(Payload)</h3><p>有些报文类型是包含Payload的,Payload的意思是消息载体的意思<br>如PUBLISH的Payload就是指消息内容(应用程序发布的消息内容)。而CONNECT的Payload则包含Client Identifier, Will Topic, Will Message, Username, Password等信息</p>
-<p>参考文献：</p>
-<p><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
-<p><a href="https://www.emqx.com/zh/blog/category/mqtt-programming">博客 - MQTT 编程 | EMQ</a></p>
-<p><a href="https://developer.aliyun.com/article/1261805">MQTT 协议入门：基础知识和快速教程-阿里云开发者社区</a></p>
-<p><a href="https://blog.csdn.net/jackwmj12/article/details/129163012">MQTT协议详解(完整版)-CSDN博客</a></p>
-]]></content>
-      <tags>
-        <tag>网络协议</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于Linux的Nginx搭建与管理</title>
     <url>/2024/11/30/Nginx%E6%90%AD%E5%BB%BA%E4%B8%8E%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h2 id="Nginx-简介"><a href="#Nginx-简介" class="headerlink" title="Nginx 简介"></a>Nginx 简介</h2><h3 id="一、Nginx概述"><a href="#一、Nginx概述" class="headerlink" title="一、Nginx概述"></a>一、Nginx概述</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>Nginx（“engine x”）是一个高性能的 HTTP &#x2F;反向代理的服务器及电子邮件（IMAP&#x2F;POP3)代理服务器。</p>
@@ -584,6 +465,125 @@ x	可执行		进入目录		执行文件
 ]]></content>
       <tags>
         <tag>Linux基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MQTT</title>
+    <url>/2024/12/04/MQTT/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>​		MQTT（Message Queuing Telemetry Transport）是一种轻量级的物联网通信协议，基于发布&#x2F;订阅模式，支持QoS级别，适用于低带宽、高延迟的网络环境。它具有精简的协议设计，开放的消息协议，以及广泛应用于物联网、M2M通信、消息推送和智能设备等领域。MQTT协议涉及发布者、订阅者和消息代理（Broker）的角色，以及连接、订阅、发布消息的过程，并包含会话保持和心跳机制，确保消息的可靠传输。</p>
+<p>MQTT官方文档：<a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
+<h1 id="1-MQTT协议概念"><a href="#1-MQTT协议概念" class="headerlink" title="1 MQTT协议概念:"></a>1 MQTT协议概念:</h1><h3 id="1-1-MQTT特点"><a href="#1-1-MQTT特点" class="headerlink" title="1.1 MQTT特点:"></a>1.1 MQTT特点:</h3><ul>
+<li><strong>轻量级</strong>：物联网设备通常在处理能力、内存和能耗方面受到限制。MQTT 开销低、报文小的特点使其非常适合这些设备，因为它消耗更少的资源，即使在有限的能力下也能实现高效的通信。</li>
+<li><strong>可靠</strong>：物联网网络常常面临高延迟或连接不稳定的情况。MQTT 支持多种 QoS 等级、会话感知和持久连接，即使在困难的条件下也能保证消息的可靠传递，使其非常适合物联网应用。</li>
+<li><strong>安全通信</strong>：安全对于物联网网络至关重要，因为其经常涉及敏感数据的传输。为确保数据在传输过程中的机密性，MQTT 提供传输层安全（TLS）和安全套接层（SSL）加密功能。此外，MQTT 还通过用户名&#x2F;密码凭证或客户端证书提供身份验证和授权机制，以保护网络及其资源的访问。</li>
+<li><strong>双向通信</strong>：MQTT 的发布-订阅模式为设备之间提供了无缝的双向通信方式。客户端既可以向主题发布消息，也可以订阅接收特定主题上的消息，从而实现了物联网生态系统中的高效数据交换，而无需直接将设备耦合在一起。这种模式也简化了新设备的集成，同时保证了系统易于扩展。</li>
+<li><strong>连续、有状态的会话</strong>：MQTT 提供了客户端与 Broker 之间保持有状态会话的能力，这使得系统即使在断开连接后也能记住订阅和未传递的消息。此外，客户端还可以在建立连接时指定一个保活间隔，这会促使 Broker 定期检查连接状态。如果连接中断，Broker 会储存未传递的消息（根据 QoS 级别确定），并在客户端重新连接时尝试传递它们。这个特性保证了通信的可靠性，降低了因间断性连接而导致数据丢失的风险。</li>
+<li><strong>大规模物联网设备支持</strong>：物联网系统往往涉及大量设备，需要一种能够处理大规模部署的协议。MQTT 的轻量级特性、低带宽消耗和对资源的高效利用使其成为大规模物联网应用的理想选择。通过采用发布-订阅模式，MQTT 实现了发送者和接收者的解耦，从而有效地减少了网络流量和资源使用。此外，协议对不同 QoS 等级的支持使得消息传递可以根据需求进行定制，确保在各种场景下获得最佳的性能表现。</li>
+</ul>
+<h1 id="2-MQTT-的工作原理："><a href="#2-MQTT-的工作原理：" class="headerlink" title="2 MQTT 的工作原理："></a>2 MQTT 的工作原理：</h1><h2 id="2-1-MQTT基本组件"><a href="#2-1-MQTT基本组件" class="headerlink" title="2.1 MQTT基本组件"></a>2.1 MQTT基本组件</h2><p>要了解 MQTT 的工作原理，首先需要掌握以下几个概念：MQTT 客户端、MQTT Broker、发布-订阅模式、主题、QoS。</p>
+<p><strong>MQTT 客户端</strong></p>
+<p>任何运行 MQTT 客户端库的应用或设备都是 MQTT 客户端。例如，使用 MQTT 的即时通讯应用是客户端，使用 MQTT 上报数据的各种传感器是客户端，各种 MQTT 测试工具也是客户端。客户端可以：</p>
+<ol>
+<li>发布其他客户端可能会订阅的信息</li>
+<li>订阅其他客户端发布的消息</li>
+<li>退定或删除应用程序的消息</li>
+<li>断开与服务器的连接</li>
+</ol>
+<p><strong>MQTT 服务端</strong></p>
+<p>MQTT Broker 是负责处理客户端请求的关键组件，同时还负责消息的转发。一个高效强大的 MQTT Broker 能够轻松应对海量连接和百万级消息吞吐量，从而帮助物联网服务提供商专注于业务发展，快速构建可靠的 MQTT 应用。 服务端可以：</p>
+<ol>
+<li>接受来自客户的网络连接</li>
+<li>接受客户发布的应用信息</li>
+<li>处理来自客户端的订阅和退订请求</li>
+<li>向订阅的客户转发应用程序消息</li>
+</ol>
+<p><strong>发布-订阅模式</strong></p>
+<p>发布-订阅模式与客户端-服务器模式的不同之处在于，它将发送消息的客户端（发布者）和接收消息的客户端（订阅者）进行了解耦。发布者和订阅者之间无需建立直接连接，而是通过 MQTT Broker 来负责消息的路由和分发。</p>
+<p>下图展示了 MQTT 发布&#x2F;订阅过程。温度传感器作为客户端连接到 MQTT Broker，并通过发布操作将温度数据发布到一个特定主题（例如 <code>Temperature</code>）。MQTT Broker 接收到该消息后会负责将其转发给订阅了相应主题（<code>Temperature</code>）的订阅者客户端。</p>
+<p><strong>主题</strong></p>
+<p>MQTT 协议根据主题来转发消息。主题通过 <code>/</code> 来区分层级，类似于 URL 路径，例如：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chat<span class="regexp">/room/</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/10/</span>temperature</span><br><span class="line"></span><br><span class="line">sensor<span class="regexp">/+/</span>temperature</span><br></pre></td></tr></table></figure>
+
+<p>MQTT 主题支持以下两种通配符：<code>+</code> 和 <code>#</code>。</p>
+<ul>
+<li><code>+</code>：表示单层通配符，例如 <code>a/+</code> 匹配 <code>a/x</code> 或 <code>a/y</code>。</li>
+<li><code>#</code>：表示多层通配符，例如 <code>a/#</code> 匹配 <code>a/x</code>、<code>a/b/c/d</code>。</li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>：通配符主题只能用于订阅，不能用于发布。</p>
+</blockquote>
+<p><strong>QoS</strong></p>
+<p>MQTT 提供了三种服务质量（QoS），在不同网络环境下保证消息的可靠性。</p>
+<ul>
+<li>QoS 0：消息最多传送一次。如果当前客户端不可用，它将丢失这条消息。</li>
+<li>QoS 1：消息至少传送一次。</li>
+<li>QoS 2：消息只传送一次。</li>
+</ul>
+<h2 id="2-2-MQTT-的工作流程"><a href="#2-2-MQTT-的工作流程" class="headerlink" title="2.2 MQTT 的工作流程"></a>2.2 MQTT 的工作流程</h2><p>​		实现MQTT协议需要客户端和服务器端通讯完成， 在通讯过程中, MQTT协议中有三种身份: 发布者(Publish)、代理(Broker)(服务器)、订阅者(Subscribe)。 其中，消息的发布者和订阅者都是客户端，消息代理是服务器，消息发布者可以同时是订阅者。</p>
+<ol>
+<li><strong>客户端使用 TCP&#x2F;IP 协议与 Broker 建立连接</strong>，可以选择使用 TLS&#x2F;SSL 加密来实现安全通信。客户端提供认证信息，并指定会话类型（Clean Session 或 Persistent Session）。</li>
+<li><strong>客户端既可以向特定主题发布消息，也可以订阅主题以接收消息</strong>。当客户端发布消息时，它会将消息发送给 MQTT Broker；而当客户端订阅消息时，它会接收与订阅主题相关的消息。</li>
+<li><strong>MQTT Broker 接收发布的消息</strong>，并将这些消息转发给订阅了对应主题的客户端。它根据 QoS 等级确保消息可靠传递，并根据会话类型为断开连接的客户端存储消息</li>
+</ol>
+<h2 id="2-3-MQTT协议设计规范"><a href="#2-3-MQTT协议设计规范" class="headerlink" title="2.3  MQTT协议设计规范"></a>2.3  MQTT协议设计规范</h2><ol>
+<li><strong>精简</strong>，不添加可有可无的功能；</li>
+<li><strong>发布&#x2F;订阅(Pub&#x2F;Sub)模式</strong>，方便消息在传感器之间传递，解耦Client&#x2F;Server模式，带来的好处在于不必预先知道对方的存在(ip&#x2F;port), 不必同时运行</li>
+<li>允许用户<strong>动态创建主题</strong>(不需要预先创建主题)，零运维成本；</li>
+<li>把传输量降到<strong>最低</strong>以提高传输效率</li>
+<li>把<strong>低带宽、高延迟、不稳定</strong>的网络等因素考虑在内；</li>
+<li>支持连续的会话保持和控制(<strong>心跳协议</strong>)</li>
+<li>客户端<strong>计算能力</strong>要求不高</li>
+<li>提供服务质量( quality of service level: <strong>QoS</strong>)管理:</li>
+<li>不强求传输数据的类型与格式，<strong>保持灵活性</strong>(指的使应用层业务数据)</li>
+</ol>
+<h3 id="2-4-MQTT协议主要特性"><a href="#2-4-MQTT协议主要特性" class="headerlink" title="2.4 MQTT协议主要特性"></a>2.4 MQTT协议主要特性</h3><ol>
+<li>开放消息协议，简单易实现。</li>
+<li>使用发布&#x2F;订阅消息模式，提供一对多的消息发布，解除应用程序耦合。</li>
+<li>对负载（协议携带的应用数据）内容屏蔽的消息传输。</li>
+<li>基于TCP&#x2F;IP网络连接,提供有序，无损，双向连接。主流的MQTT是基于TCP连接进行数据推送的，但是同样有基于UDP的版本，叫做MQTT-SN。这两种版本由于基于不同的连接方式，优缺点自然也就各有不同了。由于基于不同的连接方式，优缺点自然也就各有不同了。</li>
+<li>消息服务质量(QoS）支持，可靠传输保证;有三种消息发布服务质量:<br>QoSO:“至多一次”，消息发布完全依赖底层TCP&#x2F;IP网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。这一种方式主要普通APP的推送，倘若你的智能设备在消息推送时未联网，推送过去没收到，再次联网也就收不到了。QoS1:“至少—次”，确保消息到达，但消息重复可能会发生。QoS2:“只有一次”，确保消息到达一次。在一些要求比较严格的计费系统中，可以使用此级别。在计费系统中，消息重复或丢失会导致不正确的结果。这种最高质量的消息发布服务还可以用于即时通讯类的APP的推送，确保用户收到且只会收到一次。</li>
+<li>1字节固定报头，2字节心跳报文，最小化传输开销和协议交换，有效减少网络流量。<br>这就是为什么在介绍里说它非常适合”在物联网领域，传感器与服务器的通信，信息的收集，要知道嵌入式设备的运算能力和带宽都相对薄弱，使用这种协议来传递消息再适合不过了。</li>
+<li>在线状态感知:使用Last Will和Testament特性通知有关各方客户端异常中断的机制。<br>Last Will:即遗言机制，用于通知同一主题下的其他设备，发送遗言的设备已经断开了连接。<br>Testament:遗嘱机制，功能类似于Last Will。</li>
+</ol>
+<h3 id="2-5-MQTT协议中的方法"><a href="#2-5-MQTT协议中的方法" class="headerlink" title="2.5 MQTT协议中的方法"></a>2.5 MQTT协议中的方法</h3><p>MQTT协议中定义了一些方法(也被称为动作)，来于表示对确定资源所进行操作。这个资源可以代表预先存在的数据或动态生成数据，这取决于服务器的实现。通常来说，资源指服务器上的文件或输出。主要方法有:</p>
+<ol>
+<li>CONNECT: 客户端连接到服务器</li>
+<li>CONNACK: 连接确认</li>
+<li>PUBLISH: 发布消息</li>
+<li>PUBACK: 发布消息确认</li>
+<li>PUBREC: 发布的消息已接收</li>
+<li>PUBREL: 发布的消息已释放</li>
+<li>PUBCOMP: 发布完成</li>
+<li>SUBSCRIBE: 订阅请求</li>
+<li>SUBACK: 订阅确认</li>
+<li>UNSUBSCRIBE: 取消订阅</li>
+<li>UNSUBACK: 取消订阅确认</li>
+<li>PINGREQ: 客户端发送心跳</li>
+<li>PINGRESP: 服务端心跳响应</li>
+<li>DISCONNECT: 断开连接</li>
+<li>AUTH: 认证</li>
+</ol>
+<h2 id="3-MQTT协议数据包结构"><a href="#3-MQTT协议数据包结构" class="headerlink" title="3 MQTT协议数据包结构"></a>3 MQTT协议数据包结构</h2><p>​		在MQTT协议中，一个MQTT数据包由: 固定头(Fixed header)、可变头(Variable header)、消息体(payload)三部分构成。</p>
+<ol>
+<li>固定头(Fixed header)。存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识，如连接，发布，订阅，心跳等。其中固定头是必须的，所有类型的MQTT协议中，都必须包含固定头。</li>
+<li>可变头(Variable header)。存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容。可变头部不是可选的意思，而是指这部分在有些协议类型中存在，在有些协议中不存在。</li>
+<li>消息体（Payload)。存在于部分MQTT数据包中，表示客户端收到的具体内容。与可变头一样,在有些协议类型中有消息内容，有些协议类型中没有消息内容。</li>
+</ol>
+<h3 id="3-1-固定头-Fixed-Header"><a href="#3-1-固定头-Fixed-Header" class="headerlink" title="3.1 固定头(Fixed Header)"></a>3.1 固定头(Fixed Header)</h3><pre><code>    固定头存在于所有MQTT数据包中
+</code></pre>
+<p>固定头包含<strong>两部分</strong>内容：<br>        <strong>首字节(字节1)、</strong><br>        剩余消息报文长度(从第二个字节开始，长度为1-4字节)<br>        剩余长度是当前包中剩余内容长度的字节数，包括变量头和有效负载中的数据)。剩余长度不包含用来编码剩		余长度的字节。<br>        剩余长度使用了一种可变长度的结构来编码，这种结构使用单一字节表示0-127的值。大于127的值如下处理。每个字节的低7位用来编码数据，最高位用来表示是否还有后续字节。因此每个字节可以编码128个值，再加上一个标识位。剩余长度最多可以用四个字节来表示。<br>数据包类型</p>
+<p>​		<strong>位置</strong>: 第一个字节(Byte 1)中的7-4个bit被(Bit[7-4]),标识4位无符号值</p>
+<p>​		<strong>标志位</strong>：位置: 第一个字节中的0-3个bit位(Bit[3-0])。意思是字节位Bit[3-0]用作报文的标识。<br>首字节的低4位(bit3-bit0)用来表示某些报文类型的控制字段，实际上只有少数报文类型有控制位</p>
+<h3 id="3-2-可变头-Variable-Header"><a href="#3-2-可变头-Variable-Header" class="headerlink" title="3.2  可变头(Variable Header)"></a>3.2  可变头(Variable Header)</h3><p>可变头的意思是可变化的消息头部。有些报文类型包含可变头部有些报文则不包含。可变头部在固定头部和消息内容之间，其内容根据报文类型不同而不同</p>
+<h3 id="3-3-消息体-Payload"><a href="#3-3-消息体-Payload" class="headerlink" title="3.3  消息体(Payload)"></a>3.3  消息体(Payload)</h3><p>有些报文类型是包含Payload的,Payload的意思是消息载体的意思<br>如PUBLISH的Payload就是指消息内容(应用程序发布的消息内容)。而CONNECT的Payload则包含Client Identifier, Will Topic, Will Message, Username, Password等信息</p>
+<p>参考文献：</p>
+<p><a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html">MQTT Version 3.1.1</a></p>
+<p><a href="https://www.emqx.com/zh/blog/category/mqtt-programming">博客 - MQTT 编程 | EMQ</a></p>
+<p><a href="https://developer.aliyun.com/article/1261805">MQTT 协议入门：基础知识和快速教程-阿里云开发者社区</a></p>
+<p><a href="https://blog.csdn.net/jackwmj12/article/details/129163012">MQTT协议详解(完整版)-CSDN博客</a></p>
+]]></content>
+      <tags>
+        <tag>网络协议</tag>
       </tags>
   </entry>
 </search>
