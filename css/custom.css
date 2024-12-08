@@ -234,7 +234,7 @@
       background-position: 0% 50%;
     }
   }
-  
+ 
   /* 黑夜模式适配 */
   [data-theme="dark"] #aside-content > .card-widget.card-info {
     background: #191919ee;
@@ -845,3 +845,125 @@
 }
 
 
+
+/* 由于全屏会出bug，所以直接给他隐藏 */
+
+.winbox {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.wb-full {
+  display: none;
+}
+
+.wb-min {
+  background-position: center;
+}
+
+[data-theme='dark'] .wb-body,
+[data-theme='dark'] #changeBgBox {
+  background: #333 !important;
+}
+
+.bgbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pimgbox,
+.imgbox,
+.box {
+  width: 166px;
+  margin: 10px;
+  background-size: cover
+}
+
+.pimgbox,
+.imgbox {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pimgbox {
+  height: 240px;
+}
+
+.imgbox {
+  height: 95px;
+}
+
+.box {
+  height: 100px;
+}
+
+@media screen and (max-width: 768px) {
+  /* 背景 */
+  .pimgbox,
+  .imgbox,
+  .box {
+      height: 73px;
+      width: 135px;
+  }
+  .pimgbox {
+      height: 205px;
+  }
+  /* 2.0新增内容 */    
+  .wb-min {
+      display: none;
+  }
+  #changeBgBox .wb-body::-webkit-scrollbar {
+      display: none;
+  }
+}
+
+
+/* 欢迎信息 */
+#welcome-info {
+  background: linear-gradient(45deg, #b9f4f3, #e3fbf9);
+  border-radius: 18px;
+  padding: 8px;
+}
+[data-theme="dark"] #welcome-info {
+  background: #212121;
+}
+
+
+
+/* 鼠标样式 */
+#cursor {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  /* 这里改变跟随的底色 */
+  background: rgb(0, 0, 0);
+  border-radius: 8px;
+  opacity: 0.25;
+  z-index: 10086;
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+  transition-property: background, opacity, transform;
+}
+
+#cursor.hidden {
+  opacity: 0;
+}
+
+#cursor.hover {
+  opacity: 0.1;
+  transform: scale(2.5);
+  -webkit-transform: scale(2.5);
+  -moz-transform: scale(2.5);
+  -ms-transform: scale(2.5);
+  -o-transform: scale(2.5);
+}
+
+#cursor.active {
+  opacity: 0.5;
+  transform: scale(0.5);
+  -webkit-transform: scale(0.5);
+  -moz-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  -o-transform: scale(0.5);
+}
