@@ -413,7 +413,7 @@ div#swiper_container {
   font-family: 'ZhuZiAYuanJWD',PingFang,微软雅黑,HYTMR,SimSun;
   background-size:cover;
   color:var(--anzhiyu-white);
-  font-size:44px; /*觉得小可以开大一点*/
+  font-size:30px; /*觉得小可以开大一点*/
   position: relative;
   border-radius: 8px;
   overflow: hidden;
