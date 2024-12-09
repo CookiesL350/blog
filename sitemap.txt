@@ -1,3 +1,4 @@
+http://cookeisl.top/about/index.html
 http://cookeisl.top/2024/12/09/5/
 http://cookeisl.top/2024/12/09/4/
 http://cookeisl.top/2024/12/09/3/
@@ -10,7 +11,6 @@ http://cookeisl.top/2024/11/30/Linux%E6%93%8D%E4%BD%9C%E5%9F%BA%E7%A1%80/
 http://cookeisl.top/link/index.html
 http://cookeisl.top/glink/index.html
 http://cookeisl.top/about1/index.html
-http://cookeisl.top/about/index.html
 http://cookeisl.top/messageboard/index.html
 http://cookeisl.top/2024/12/04/MQTT/
 http://cookeisl.top/music/index.html
@@ -22,8 +22,8 @@ http://cookeisl.top/
 http://cookeisl.top/tags/Linux%E5%9F%BA%E7%A1%80/
 http://cookeisl.top/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/
 http://cookeisl.top/categories/1/
-http://cookeisl.top/categories/2/
 http://cookeisl.top/categories/3/
+http://cookeisl.top/categories/2/
+http://cookeisl.top/categories/5/
 http://cookeisl.top/categories/Linux%E5%9F%BA%E7%A1%80/
 http://cookeisl.top/categories/4/
-http://cookeisl.top/categories/5/
