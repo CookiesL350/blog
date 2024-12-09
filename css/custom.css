@@ -921,7 +921,7 @@
 
 /* 欢迎信息 */
 #welcome-info {
-  background: linear-gradient(45deg, #b9f4f3, #e3fbf9);
+  background: linear-gradient(45deg, #0059ff, #03eeda);
   border-radius: 18px;
   padding: 8px;
 }
@@ -937,7 +937,7 @@
   width: 16px;
   height: 16px;
   /* 这里改变跟随的底色 */
-  background: rgb(0, 0, 0);
+  background: rgb(255, 255, 255);
   border-radius: 8px;
   opacity: 0.25;
   z-index: 10086;
@@ -967,3 +967,44 @@
   -ms-transform: scale(0.5);
   -o-transform: scale(0.5);
 }
+
+
+
+/*搜索框美化*/
+.search-dialog {
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 0px;
+}
+
+#search-mask {
+  background: rgba(255,255,255,0);
+}
+/*手机端毛玻璃优化*/
+#sidebar #sidebar-menus.open {
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(10px);
+}
+
+#sidebar #menu-mask {
+  background: rgba(255,255,255,0);
+}
+@keyframes gradientBG {
+  0% {
+      background-position: 25% 70%;
+  }
+  50% {
+      background-position: 70% 25%;
+  }
+  100% {
+      background-position: 25% 70%;
+  }
+}
+#web_bg {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 110% 98%;
+  animation: gradientBG 15s ease infinite;
+}
+
+
+

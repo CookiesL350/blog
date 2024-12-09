@@ -3,7 +3,7 @@ $.ajax({
     type: 'get',
     url: 'https://apis.map.qq.com/ws/location/v1/ip',
     data: {
-        key: 'DGPBZ-IC3E3-NQM3N-RXBSS-RGZMH-7NB2O',
+        key: 'GHLBZ-SCU6A-FRFKA-CLRKQ-4EOJK-K6BTB',
         output: 'jsonp',
     },
     dataType: 'jsonp',
@@ -29,7 +29,7 @@ function getDistance(e1, n1, e2, n2) {
 
 function showWelcome() {
 
-    let dist = getDistance(113.34499552, 23.15537143, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
+    let dist = getDistance(113.111466,22.623477, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
     let pos = ipLoacation.result.ad_info.nation;
     let ip;
     let posdesc;
@@ -144,10 +144,10 @@ function showWelcome() {
                     posdesc = "来碗热干面！";
                     break;
                 case "湖南省":
-                    posdesc = "74751，长沙斯塔克。";
+                    posdesc = "独立寒秋，湘江北去，橘子洲头";
                     break;
                 case "广东省":
-                    posdesc = "老板来两斤福建人。";
+                    posdesc = "咩啊";
                     break;
                 case "广西壮族自治区":
                     posdesc = "桂林山水甲天下。";
@@ -205,11 +205,11 @@ function showWelcome() {
     let timeChange;
     let date = new Date();
     if (date.getHours() >= 5 && date.getHours() < 11) timeChange = "<span>上午好</span>，一日之计在于晨！";
-    else if (date.getHours() >= 11 && date.getHours() < 13) timeChange = "<span>中午好</span>，该摸鱼吃午饭了。";
+    else if (date.getHours() >= 11 && date.getHours() < 13) timeChange = "<span>中午好</span>，事到如今，先吃饭吧。";
     else if (date.getHours() >= 13 && date.getHours() < 15) timeChange = "<span>下午好</span>，懒懒地睡个午觉吧！";
     else if (date.getHours() >= 15 && date.getHours() < 16) timeChange = "<span>三点几啦</span>，一起饮茶呀！";
     else if (date.getHours() >= 16 && date.getHours() < 19) timeChange = "<span>夕阳无限好！</span>";
-    else if (date.getHours() >= 19 && date.getHours() < 24) timeChange = "<span>晚上好</span>，夜生活嗨起来！";
+    else if (date.getHours() >= 19 && date.getHours() < 24) timeChange = "<span>晚上好</span>，早点休息！";
     else timeChange = "夜深了，早点休息，少熬夜。";
 
     try {
@@ -222,4 +222,4 @@ function showWelcome() {
 }
 window.onload = showWelcome;
 // 如果使用了pjax在加上下面这行代码
-//document.addEventListener('pjax:complete', showWelcome);
+document.addEventListener('pjax:complete', showWelcome);
