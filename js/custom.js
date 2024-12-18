@@ -77,6 +77,7 @@ function createWinbox() {
     <div class="bgbox">
     <a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://cn.bing.com/th?id=OHR.GBRTurtle_ZH-CN6069093254_1920x1080.jpg)" class="imgbox" onclick="changeBg('url(https\://cn.bing.com/th?id=OHR.GBRTurtle_ZH-CN6069093254_1920x1080.jpg)')"></a>
     <a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://s3.qjqq.cn/71/674e7d7de8618.webp!color)" class="imgbox" onclick="changeBg('url(https\://s3.qjqq.cn/71/674e7d7de8618.webp!color)')"></a>
+    <a href="javascript:;" rel="noopener external nofollow" style="background-image:url(img/background.png)" class="pimgbox" onclick="changeBg('img/background.png)')"></a>
     </div>
     
  
